@@ -95,10 +95,13 @@ export default function Home({ themeName, toggleTheme, recentPosts }) {
             On the backend I use Node.js for most personal projects but also
             dabble in Python, Java and have been recently getting into Go. When
             it comes to deploying infrastructure (traditional or serverless), I
-            have experience with AWS (+ the certs to prove it!) and Terraform. I
-            like GitHub actions for personal projects; at work I write Jenkins
-            pipelines with Groovy. Bit of a jack-of-all-trades: I'll jump into
-            anything to get the job done!
+            have experience with AWS (
+            <Link href='https://www.credly.com/users/george-mccarron'>
+              + the certs to prove it!
+            </Link>
+            ) and Terraform. I like GitHub actions for personal projects; at
+            work I write Jenkins pipelines with Groovy. Bit of a
+            jack-of-all-trades: I'll jump into anything to get the job done!
           </Paragraph>
         </div>
 
