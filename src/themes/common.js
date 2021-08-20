@@ -10,8 +10,8 @@ const commonTheme = {
     },
     body: {
       font: 'Montserrat',
-      size: '0.9em',
-      lineHeight: '1.5em',
+      size: '1em',
+      lineHeight: '1.6em',
     },
   },
 };
