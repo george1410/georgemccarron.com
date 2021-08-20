@@ -98,9 +98,11 @@ const Post = ({ themeName, toggleTheme, post }) => {
         <CoverImage
           src={post.coverImage}
           alt=''
+          layout='responsive'
           width={post.coverImageDimensions.width}
           height={post.coverImageDimensions.height}
           quality={90}
+          placeholder='blur'
         />
       </CoverImageContainer>
       <Markdown dangerouslySetInnerHTML={{ __html: post.content }} />

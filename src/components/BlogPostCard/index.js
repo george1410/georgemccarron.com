@@ -79,6 +79,7 @@ const BlogPostCard = (props) => {
           <CoverImage
             src={props.coverImage}
             alt=''
+            layout='responsive'
             width={props.coverImageDimensions.width}
             height={props.coverImageDimensions.height}
             quality={90}
