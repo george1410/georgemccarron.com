@@ -1,6 +1,5 @@
 'use client';
 
-import { Url } from 'next/dist/shared/lib/router/router';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
@@ -12,8 +11,6 @@ export const GlobalNavItem = ({
   href: string;
   children: ReactNode;
 }) => {
-  'use client';
-
   const path = usePathname();
 
   return (
