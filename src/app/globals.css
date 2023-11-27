@@ -3,25 +3,56 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  color-scheme: dark;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  @apply bg-zinc-50 text-zinc-700;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.prose {
+  @apply sm:text-lg md:text-xl !leading-7 sm:!leading-9;
+}
+
+code {
+  @apply !text-sm md:!text-base !leading-loose md:!leading-loose rounded-md !font-normal;
+}
+
+pre > code {
+  @apply grid;
+  counter-reset: line;
+}
+
+pre {
+  @apply !px-0 rounded-lg;
+}
+
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+
+  display: inline-block;
+  width: 1rem;
+  margin-right: 2rem;
+  text-align: right;
+  color: gray;
+}
+
+[data-line] {
+  @apply px-6 border-l-4 border-l-transparent;
+}
+
+[data-highlighted-line] {
+  background: rgba(200, 200, 255, 0.1);
+  @apply border-l-blue-400;
+}
+
+[data-rehype-pretty-code-fragment] [data-rehype-pretty-code-title] + pre {
+  @apply mt-0 rounded-t-none;
+}
+
+[data-rehype-pretty-code-fragment] > [data-rehype-pretty-code-title] {
+  @apply bg-blue-400 rounded-t-md px-6 py-2 text-[#2e3440ff] font-medium;
 }
