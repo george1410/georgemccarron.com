@@ -8,6 +8,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'logo.clearbit.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.scdn.co',
+      },
     ],
   },
 };
