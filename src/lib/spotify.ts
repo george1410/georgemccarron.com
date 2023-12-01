@@ -14,6 +14,7 @@ const getAccessToken = () =>
       grant_type: 'refresh_token',
       refresh_token: env.SPOTIFY_REFRESH_TOKEN,
     }),
+    next: { revalidate: 60 },
   }).then((res) => res.json());
 
 const getSpotifyClient = async () => {
