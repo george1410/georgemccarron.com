@@ -21,7 +21,7 @@ const TalkListItem = ({ talk }: { talk: Talk }) => {
         <h2 className='font-bold text-lg hover:underline'>
           <Link href={`/speaking/${talk.slug}`}>{talk.title}</Link>
         </h2>
-        <MDXContent />
+        <p>{talk.blurb}</p>
       </div>
     </div>
   );

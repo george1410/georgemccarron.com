@@ -36,6 +36,7 @@ export const Talk = defineDocumentType(() => ({
     conference: { type: 'string', required: true },
     conferenceUrl: { type: 'string', required: false },
     location: { type: 'string', required: false },
+    blurb: { type: 'string', required: true },
   },
   computedFields: {
     url: {
