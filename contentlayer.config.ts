@@ -25,9 +25,34 @@ export const Post = defineDocumentType(() => ({
   },
 }));
 
+export const Talk = defineDocumentType(() => ({
+  name: 'Talk',
+  filePathPattern: `talks/**/*.mdx`,
+  contentType: 'mdx',
+  fields: {
+    title: { type: 'string', required: true },
+    date: { type: 'date', required: true },
+    videoUrl: { type: 'string', required: true },
+    conference: { type: 'string', required: true },
+    conferenceUrl: { type: 'string', required: false },
+    location: { type: 'string', required: false },
+  },
+  computedFields: {
+    url: {
+      type: 'string',
+      resolve: (talk) =>
+        `/speaking/${talk._raw.sourceFileName.replace('.mdx', '')}`,
+    },
+    slug: {
+      type: 'string',
+      resolve: (talk) => talk._raw.sourceFileName.replace('.mdx', ''),
+    },
+  },
+}));
+
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Post],
+  documentTypes: [Post, Talk],
   mdx: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [

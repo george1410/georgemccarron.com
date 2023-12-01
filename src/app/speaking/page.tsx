@@ -1,9 +1,12 @@
-export default function Blog() {
+import { TalkList } from '@/components/TalkList';
+
+export default function Speaking() {
   return (
     <main>
       <section>
-        <h1 className='text-3xl font-bold'>Speaking</h1>
+        <h1 className='text-6xl font-black tracking-wide mb-8'>Speaking</h1>
       </section>
+      <TalkList />
     </main>
   );
 }
