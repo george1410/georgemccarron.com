@@ -3,11 +3,17 @@ import Me from '../../public/me.jpg';
 import Link from 'next/link';
 import { BlogPostGrid } from '@/components/BlogPostGrid';
 import { Timeline } from '@/components/Timeline';
-import { YouTubeEmbed } from '@/components/YouTubeEmbed';
 import { allTalks } from 'contentlayer/generated';
 import { compareDesc, format } from 'date-fns';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import { TalkList } from '@/components/TalkList';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faGithub,
+  faLinkedin,
+  faXTwitter,
+} from '@fortawesome/free-brands-svg-icons';
+import { SocialIcons } from '@/components/SocialIcons';
 
 export default function Home() {
   const latestTalk = allTalks.sort((a, b) =>
@@ -19,16 +25,16 @@ export default function Home() {
     <main className='flex gap-12 flex-col'>
       <section className='flex gap-8 flex-col md:flex-row items-center'>
         <Image src={Me} alt='Photo of George' className='rounded-full w-40' />
-        <div className='self-center md:order-0'>
-          <h1 className='text-6xl font-black tracking-wide mb-4'>
-            George McCarron
-          </h1>
+        <div className='self-center md:order-0 gap-2 flex flex-col'>
+          <h1 className='text-6xl font-black tracking-wide'>George McCarron</h1>
 
           <p className='text-lg'>
             I&apos;m a software engineer based in London, UK. I&apos;m currently
-            building software that thinks like a real estate lawyer at Orbital
+            building software that thinks like a Real Estate Lawyer at Orbital
             Witness.
           </p>
+
+          <SocialIcons />
         </div>
       </section>
 

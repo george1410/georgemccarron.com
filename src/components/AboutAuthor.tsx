@@ -1,21 +1,29 @@
 import Image from 'next/image';
 import Me from '../../public/me.jpg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faGithub,
+  faXTwitter,
+  faLinkedin,
+} from '@fortawesome/free-brands-svg-icons';
+import { SocialIcons } from './SocialIcons';
 
 export const AboutAuthor = () => {
   return (
-    <div className='bg-zinc-100 py-8 px-12 flex flex-col md:flex-row gap-4 rounded-lg my-12'>
+    <div className='bg-zinc-100 py-8 px-12 flex flex-col md:flex-row gap-4 rounded-lg my-12 items-center'>
       <Image
         src={Me}
         alt='Photo of George'
-        className='rounded-full aspect-square w-20'
+        className='rounded-full w-[6rem] h-[6rem]'
       />
       <div>
         <h3 className='text-xl font-medium'>George McCarron</h3>
         <p>
           I&apos;m a software engineer based in London, UK. I&apos;m currently
-          building software that thinks like a real estate lawyer at Orbital
+          building software that thinks like a Real Estate Lawyer at Orbital
           Witness.
         </p>
+        <SocialIcons />
       </div>
     </div>
   );
