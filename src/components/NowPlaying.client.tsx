@@ -27,7 +27,7 @@ export const NowPlayingClient = () => {
     : null;
 
   return (
-    <div className='flex flex-col gap-2 w-full'>
+    <div className='flex flex-col gap-2 w-full md:w-auto'>
       <h3 className='font-medium text-md text-slate-500 flex items-center'>
         Now Playing <FontAwesomeIcon icon={faSpotify} className='ml-2' />
       </h3>
