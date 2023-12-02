@@ -16,7 +16,7 @@ export const AboutAuthor = () => {
         alt='Photo of George'
         className='rounded-full w-[6rem] h-[6rem]'
       />
-      <div>
+      <div className='flex flex-col gap-2'>
         <h3 className='text-xl font-medium'>George McCarron</h3>
         <p>
           I&apos;m a software engineer based in London, UK. I&apos;m currently
