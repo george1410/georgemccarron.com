@@ -43,7 +43,7 @@ export default function Home() {
           <h2 className='text-2xl font-semibold'>Recent Posts</h2>
           <Link
             href='/blog'
-            className='self-end py-2 px-4 rounded-lg font-semibold text-slate-600 hover:bg-slate-100 w-full md:w-auto text-center'
+            className='self-end py-2 px-4 rounded-lg font-semibold text-slate-600 hover:bg-slate-100 text-center'
           >
             View All Posts
           </Link>
@@ -56,7 +56,7 @@ export default function Home() {
           <h2 className='text-2xl font-semibold'>Latest Talk</h2>
           <Link
             href='/speaking'
-            className='self-end py-2 px-4 rounded-lg font-semibold text-slate-600 hover:bg-slate-100 w-full md:w-auto text-center'
+            className='self-end py-2 px-4 rounded-lg font-semibold text-slate-600 hover:bg-slate-100 text-center'
           >
             View All Talks
           </Link>

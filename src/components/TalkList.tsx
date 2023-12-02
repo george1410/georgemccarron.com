@@ -8,8 +8,8 @@ const TalkListItem = ({ talk }: { talk: Talk }) => {
   const MDXContent = useMDXComponent(talk.body.code);
 
   return (
-    <div className='flex gap-4 items-center'>
-      <div>
+    <div className='flex gap-4 items-center flex-col md:flex-row'>
+      <div className='w-full md:w-auto'>
         <YouTubeEmbed url={talk.videoUrl} />
       </div>
       <div className='flex-1'>
