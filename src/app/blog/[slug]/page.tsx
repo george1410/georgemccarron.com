@@ -1,6 +1,5 @@
 import { Callout } from '@/components/Callout';
 import { YouTubeEmbed } from '@/components/YouTubeEmbed';
-import { allPosts } from 'contentlayer/generated';
 import { format } from 'date-fns';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import { notFound } from 'next/navigation';
@@ -8,21 +7,22 @@ import { ReactNode } from 'react';
 import Image from 'next/image';
 import { AboutAuthor } from '@/components/AboutAuthor';
 import Link from 'next/link';
+import { publishedPosts } from '@/lib/posts';
 
 export const generateStaticParams = async () =>
-  allPosts.map((post) => ({
+  publishedPosts.map((post) => ({
     slug: post.slug,
   }));
 
 export const generateMetadata = ({ params }: { params: { slug: string } }) => {
-  const post = allPosts.find((post) => post.slug === params.slug);
+  const post = publishedPosts.find((post) => post.slug === params.slug);
   if (!post) notFound();
 
   return { title: post.title };
 };
 
 export default function Page({ params }: { params: { slug: string } }) {
-  const post = allPosts.find((post) => post.slug === params.slug);
+  const post = publishedPosts.find((post) => post.slug === params.slug);
   if (!post) notFound();
 
   const MDXContent = useMDXComponent(post.body.code);

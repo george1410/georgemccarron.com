@@ -1,10 +1,10 @@
-import { allPosts } from 'contentlayer/generated';
+import { publishedPosts } from '@/lib/posts';
 import { compareDesc, format } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export const BlogPostGrid = ({ limit }: { limit?: number }) => {
-  const posts = allPosts
+  const posts = publishedPosts
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
     .slice(0, limit);
 
