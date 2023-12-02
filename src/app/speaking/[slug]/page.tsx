@@ -3,7 +3,6 @@ import { allTalks } from 'contentlayer/generated';
 import { format } from 'date-fns';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import { AboutAuthor } from '@/components/AboutAuthor';
 import Link from 'next/link';
 

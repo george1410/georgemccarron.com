@@ -3,24 +3,10 @@ import Me from '../../public/me.jpg';
 import Link from 'next/link';
 import { BlogPostGrid } from '@/components/BlogPostGrid';
 import { Timeline } from '@/components/Timeline';
-import { allTalks } from 'contentlayer/generated';
-import { compareDesc, format } from 'date-fns';
-import { useMDXComponent } from 'next-contentlayer/hooks';
 import { TalkList } from '@/components/TalkList';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faGithub,
-  faLinkedin,
-  faXTwitter,
-} from '@fortawesome/free-brands-svg-icons';
 import { SocialIcons } from '@/components/SocialIcons';
 
 export default function Home() {
-  const latestTalk = allTalks.sort((a, b) =>
-    compareDesc(new Date(a.date), new Date(b.date))
-  )[0];
-  const MDXContent = useMDXComponent(latestTalk.body.code);
-
   return (
     <main className='flex gap-12 flex-col'>
       <section className='flex gap-8 flex-col md:flex-row items-center'>

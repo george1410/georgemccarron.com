@@ -1,11 +1,5 @@
 import Image from 'next/image';
 import Me from '../../public/me.jpg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faGithub,
-  faXTwitter,
-  faLinkedin,
-} from '@fortawesome/free-brands-svg-icons';
 import { SocialIcons } from './SocialIcons';
 
 export const AboutAuthor = () => {

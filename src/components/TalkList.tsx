@@ -1,12 +1,9 @@
 import { Talk, allTalks } from 'contentlayer/generated';
 import { compareDesc, format } from 'date-fns';
 import { YouTubeEmbed } from './YouTubeEmbed';
-import { useMDXComponent } from 'next-contentlayer/hooks';
 import Link from 'next/link';
 
 const TalkListItem = ({ talk }: { talk: Talk }) => {
-  const MDXContent = useMDXComponent(talk.body.code);
-
   return (
     <div className='flex gap-4 items-center flex-col md:flex-row'>
       <div className='w-full md:w-auto'>

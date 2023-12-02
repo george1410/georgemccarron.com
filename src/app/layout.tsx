@@ -7,6 +7,7 @@ import { GlobalFooter } from '@/components/GlobalFooter';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import Providers from './providers';
+import { ReactNode } from 'react';
 
 config.autoAddCss = false;
 
@@ -17,11 +18,7 @@ export const metadata: Metadata = {
   description: 'Software engineer based in London, UK.',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en'>
       <body className={`${inter.className} flex flex-col min-h-screen`}>

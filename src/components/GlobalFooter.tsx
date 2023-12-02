@@ -1,9 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faGithub,
-  faLinkedin,
-  faXTwitter,
-} from '@fortawesome/free-brands-svg-icons';
 import { NowPlaying } from './NowPlaying';
 import { format } from 'date-fns';
 import { SocialIcons } from './SocialIcons';
