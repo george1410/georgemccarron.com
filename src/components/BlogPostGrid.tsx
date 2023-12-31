@@ -12,12 +12,12 @@ export const BlogPostGrid = ({ limit }: { limit?: number }) => {
     <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-auto'>
       {posts.map((post) => (
         <Link key={post._id} href={`/blog/${post.slug}`} className='group'>
-          <div className='mb-2 relative w-full aspect-video'>
+          <div className='mb-2 relative w-full aspect-video rounded-md group-hover:[&>*]:scale-110 [&>*]:duration-500 overflow-hidden'>
             <Image
               fill
               src={post.heroImage}
               alt=''
-              className='object-cover object-center rounded-md'
+              className='object-cover object-center'
             />
           </div>
           <span className='text-sm text-zinc-400 font-semibold'>
