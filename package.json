@@ -19,6 +19,7 @@
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^5.12.1",
     "@vercel/analytics": "^1.1.2",
+    "@vercel/speed-insights": "^1.0.5",
     "contentlayer": "^0.3.4",
     "date-fns": "^2.30.0",
     "next": "14.0.3",

@@ -3,6 +3,7 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import { GlobalFooter } from '@/components/GlobalFooter';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main className='max-w-screen-lg mx-4 my-8 self-center flex-1'>
             {children}
             <Analytics />
+            <SpeedInsights />
           </main>
           <GlobalFooter />
         </Providers>
