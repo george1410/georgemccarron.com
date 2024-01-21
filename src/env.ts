@@ -11,6 +11,7 @@ export const env = createEnv({
     SPOTIFY_CLIENT_SECRET: z.string().min(1),
     SPOTIFY_REFRESH_TOKEN: z.string().min(1),
     NODE_ENV: z.enum(['development', 'production']),
+    DB_CONNECTION_STRING: z.string().url(),
   },
   /*
    * Environment variables available on the client (and server).
@@ -29,5 +30,6 @@ export const env = createEnv({
     SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
     SPOTIFY_REFRESH_TOKEN: process.env.SPOTIFY_REFRESH_TOKEN,
     NODE_ENV: process.env.NODE_ENV,
+    DB_CONNECTION_STRING: process.env.DB_CONNECTION_STRING,
   },
 });
