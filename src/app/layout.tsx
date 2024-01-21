@@ -23,10 +23,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang='en'>
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
+      <body className={`${inter.className} flex flex-col min-h-screen w-full`}>
         <Providers>
           <GlobalNav />
-          <main className='max-w-screen-lg mx-4 my-8 self-center flex-1'>
+          <main className='max-w-screen-lg w-full box-border px-4 my-8 self-center flex-1'>
             {children}
             <Analytics />
             <SpeedInsights />
