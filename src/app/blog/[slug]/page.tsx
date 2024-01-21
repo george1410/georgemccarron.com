@@ -20,6 +20,7 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
   if (!post) notFound();
 
   return {
+    metadataBase: new URL('https://georgemccarron.com'),
     title: `${post.title} | George McCarron`,
     openGraph: {
       title: post.title,
@@ -28,7 +29,7 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
       siteName: 'George McCarron',
       type: 'article',
       authors: ['George McCarron'],
-      images: [{ url: `https://georgemccarron.com${post.heroImage}` }],
+      images: [{ url: post.heroImage }],
       publishedTime: new Date(post.date).toISOString(),
     },
   };
