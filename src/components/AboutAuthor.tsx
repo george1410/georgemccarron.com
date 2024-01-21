@@ -15,7 +15,7 @@ export const AboutAuthor = () => {
         <p>
           I&apos;m a software engineer based in London, UK. I&apos;m currently
           building software that thinks like a Real Estate Lawyer at Orbital
-          Witness.
+          Witness. Sometimes I write. Sometimes I speak.
         </p>
         <SocialIcons />
       </div>
