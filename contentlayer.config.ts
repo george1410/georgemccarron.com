@@ -1,5 +1,6 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files';
 import remarkGfm from 'remark-gfm';
+import remarkEmoji from 'remark-emoji';
 import rehypePrettyCode from 'rehype-pretty-code';
 
 export const Post = defineDocumentType(() => ({
@@ -56,7 +57,7 @@ export default makeSource({
   contentDirPath: 'data',
   documentTypes: [Post, Talk],
   mdx: {
-    remarkPlugins: [remarkGfm],
+    remarkPlugins: [remarkGfm, remarkEmoji],
     rehypePlugins: [
       [
         rehypePrettyCode,
