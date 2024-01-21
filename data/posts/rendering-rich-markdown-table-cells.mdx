@@ -70,7 +70,7 @@ And this would just render plain text inside the cells - rather than having the 
 | Something | Here is a list:<br/>- One<br/>  - Sub Item<br/>- Two<br/><br/>That was a list. |
 | Another   | This is just some text                                                         |
 
-To solve this, I wrote a custom remark plugin! This isn't a deep dive into unified and remark and ASTs, so I won't go into too much detail, but essentially... it then extracts the children of each of the `tableCell` nodes in the AST, convert them back to raw markdown, parses them again without the context of being inside a table cell, before finally replacing the original `tableCell` children with the newly created AST.
+To solve this, I wrote a custom remark plugin! This isn't a deep dive into unified and remark and ASTs, so I won't go into too much detail, but essentially... it extracts the children of each of the `tableCell` nodes in the AST, converts them back to raw markdown, parses them again without the context of being inside a table cell, before finally replacing the original `tableCell` children with the newly created AST.
 
 ```ts showLineNumbers {10-21}
 import { gfmToMarkdown } from 'mdast-util-gfm';
