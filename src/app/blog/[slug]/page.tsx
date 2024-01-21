@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { AboutAuthor } from '@/components/AboutAuthor';
 import Link from 'next/link';
 import { publishedPosts } from '@/lib/posts';
+import LikePost from '@/components/LikePost';
 
 export const generateStaticParams = async () =>
   publishedPosts.map((post) => ({
@@ -32,6 +33,8 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
     },
   };
 };
+
+export const dynamic = 'force-dynamic';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const post = publishedPosts.find((post) => post.slug === params.slug);
@@ -72,6 +75,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             }}
           />
         </div>
+        <LikePost postId={post._id} />
         <AboutAuthor />
         <Link
           href='/blog'
