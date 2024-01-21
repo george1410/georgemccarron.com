@@ -21,7 +21,8 @@ const config: Config = {
               background: 'rgba(205, 200, 255, 0.05)',
             },
             code: {
-              color: '#86e1fc',
+              backgroundColor: colors.slate[200],
+              padding: '0.1rem 0.4rem',
               '&::before': { content: `unset !important` },
               '&::after': { content: `unset !important` },
               fontWeight: 'normal',
