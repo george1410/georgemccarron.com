@@ -27,20 +27,6 @@ const config: Config = {
               '&::after': { content: `unset !important` },
               fontWeight: 'normal',
             },
-            '[data-rehype-pretty-code-fragment]:nth-of-type(2) pre': {
-              '[data-line]::before': {
-                content: 'counter(line)',
-                counterIncrement: 'line',
-                display: 'inline-block',
-                width: '1rem',
-                marginRight: '1rem',
-                textAlign: 'right',
-                color: colors.slate[600],
-              },
-              '[data-highlighted-line]::before': {
-                color: colors.slate[400],
-              },
-            },
             hr: {
               width: '6rem',
               marginLeft: 'auto',
