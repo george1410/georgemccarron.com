@@ -18,7 +18,19 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
   const post = publishedPosts.find((post) => post.slug === params.slug);
   if (!post) notFound();
 
-  return { title: post.title };
+  return {
+    title: `${post.title} | George McCarron`,
+    openGraph: {
+      title: post.title,
+      description: post.subtitle,
+      url: 'https://georgemccarron.com',
+      siteName: 'George McCarron',
+      type: 'article',
+      authors: ['George McCarron'],
+      images: [{ url: `https://georgemccarron.com${post.heroImage}` }],
+      publishedTime: new Date(post.date).toISOString(),
+    },
+  };
 };
 
 export default function Page({ params }: { params: { slug: string } }) {
