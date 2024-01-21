@@ -1,0 +1,143 @@
+---
+title: Rendering Rich Markdown Table Cells
+subtitle: A story about being pragmatic and getting things done
+date: 2024-01-21
+heroImage: /images/rendering-rich-markdown-table-cells/hero.png
+draft: false
+---
+
+This is not a story about writing the best code, or the most efficient code, or the most elegant code. It's a story about writing code that works, and works well enough to get the job done. Sometimes cutting corners and foregoing a little engineering rigour is the right thing to do on balance. In fact, in my opinion, one of the most important things about being a great engineer is about knowing when to do that, and when things need to be done properly.
+
+---
+
+Our frontend app is being sent markdown (not strictly true, we'll get to that...) from the backend that looks like something like this:
+
+```md
+| Key       | Value                                                                          |
+| --------- | ------------------------------------------------------------------------------ |
+| Something | Here is a list:<br/>- One<br/>  - Sub Item<br/>- Two<br/><br/>That was a list. |
+| Another   | This is just some text                                                         |
+```
+
+At first glance, nothing particularly unusual, however if you dig a little deeper, you'll soon come to realise that this is not actually valid (GitHub-Flavoured) markdown. You see, within a markdown table cell, you can only have a single line of text. Therefore, if you want to display something like a list, you need to put HTML inside the cell. That's not quite what's happening here. We're using `<br/>` tags instead of newlines which is fine, but we're also trying to use markdown syntax for an unordered (nested) list, which is unsupported syntax. Ideally we would be using HTML syntax for the list, like this, and everything would be fine:
+
+```md
+| Key       | Value                                                                                      |
+| --------- | ------------------------------------------------------------------------------------------ |
+| Something | Here is a list:<ul><li>One<ul><li>Sub Item</li></ul></li><li>Two</li></ul>That was a list. |
+| Another   | This is just some text                                                                     |
+```
+
+This is valid markdown, and will be rendered as a list by our pipeline. However, life isn't always easy. The "proper" way to solve this would be to fix the markdown on the backend, but in this case that is not feasible without a lot of changes to core aspects of our application. So, in the interest of being pragmatic, we have to make do with what we have and find a way to make good with it.
+
+Before encountering this problem my unified pipeline for converting markdown into an AST and then into a HTML string looked something like this (I have distilled it to just the important bits for this example):
+
+```ts showLineNumbers
+unified()
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkRehype)
+  .use(rehypeStringify);
+```
+
+However running it through the remark pipeline would result in this HTML:
+
+```html
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Something</td>
+      <td>Here is a list:- One  - Sub Item- TwoThat was a list.</td>
+    </tr>
+    <tr>
+      <td>Another</td>
+      <td>This is just some text</td>
+    </tr>
+  </tbody>
+</table>
+```
+
+And this would just render plain text inside the cells - rather than having the list rendered with actual bullets:
+
+| Key       | Value                                                                          |
+| --------- | ------------------------------------------------------------------------------ |
+| Something | Here is a list:<br/>- One<br/>  - Sub Item<br/>- Two<br/><br/>That was a list. |
+| Another   | This is just some text                                                         |
+
+To solve this, I wrote a custom remark plugin! This isn't a deep dive into unified and remark and ASTs, so I won't go into too much detail, but essentially... it then extracts the children of each of the `tableCell` nodes in the AST, convert them back to raw markdown, parses them again without the context of being inside a table cell, before finally replacing the original `tableCell` children with the newly created AST.
+
+```ts showLineNumbers {10-21}
+import { gfmToMarkdown } from 'mdast-util-gfm';
+import { toMarkdown } from 'mdast-util-to-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkParse from 'remark-parse';
+import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
+
+function remarkRichTables() {
+  return (tree) => {
+    visit(tree, 'tableCell', (node) => {
+      const cellMarkdown = toMarkdown(node, {
+        extensions: [gfmToMarkdown()],
+      }).replaceAll('<br/>', '\n');
+
+      node.children = (
+        unified()
+          .use(remarkParse)
+          .use(remarkGfm)
+          .parse(cellMarkdown)
+      ).children;
+    });
+  };
+}
+```
+
+I then integrated this new `remarkRichTables` plugin into my remark pipeline, after the `remarkGfm` plugin, since that is the one that is responsible for parsing the markdown table syntax.
+
+```ts showLineNumbers {4}
+unified()
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkRichTables)
+  .use(remarkRehype)
+  .use(rehypeStringify);
+```
+
+This means the AST will contain all of the correct nodes inside the table cells, and the `remarkRehype` plugin will be able to convert them into HTML like so:
+
+```html
+...
+  <td>
+    <p>Here is a list:</p>
+    <ul>
+      <li>
+        One
+        <ul>
+          <li>Sub Item</li>
+        </ul>
+      </li>
+      <li>Two</li>
+    </ul>
+    <p>That was a list.</p>
+  </td>
+...
+```
+
+And the resulting HTML renders like this - meaning my work here is done! :tada:
+
+| Key       | Value                                                                                      |
+| --------- | ------------------------------------------------------------------------------------------ |
+| Something | Here is a list:<ul><li>One<ul><li>Sub Item</li></ul></li><li>Two</li></ul>That was a list. |
+| Another   | This is just some text                                                                     |
+
+---
+
+Is this the most efficient way to solve the problem? Unlikely. Is it a good example of how to write a remark plugin? Probably not. But it works, and right now that's good enough. If performance becomes an issue, it can be revisited. As [Kent Beck](https://en.wikipedia.org/wiki/Kent_Beck) said:
+
+> Make it work, Make it right, Make it fast
