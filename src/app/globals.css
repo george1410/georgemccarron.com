@@ -13,11 +13,11 @@ body {
 }
 
 .prose {
-  @apply sm:text-lg md:text-xl !leading-7 sm:!leading-9;
+  @apply sm:text-lg md:text-base !leading-7 sm:!leading-9;
 }
 
 code {
-  @apply !text-sm md:!text-base !leading-loose md:!leading-loose rounded-md !font-normal;
+  @apply !text-sm !leading-loose rounded-md !font-normal;
 }
 
 pre > code {
