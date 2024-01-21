@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: 'georgemccarron'
+      POSTGRES_USER: 'changeme'
+      POSTGRES_PASSWORD: 'changeme'
+    ports:
+      - '${DATABASE_PORT:-5432}:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
