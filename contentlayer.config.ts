@@ -57,6 +57,8 @@ export default makeSource({
   contentDirPath: 'data',
   documentTypes: [Post, Talk],
   mdx: {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     remarkPlugins: [remarkGfm, remarkEmoji],
     rehypePlugins: [
       [
