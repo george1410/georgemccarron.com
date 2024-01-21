@@ -2,6 +2,7 @@ import { GlobalNav } from '@/components/GlobalNav';
 import './globals.css';
 
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/react';
 import { Inter } from 'next/font/google';
 import { GlobalFooter } from '@/components/GlobalFooter';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <GlobalNav />
           <main className='max-w-screen-lg mx-4 my-8 self-center flex-1'>
             {children}
+            <Analytics />
           </main>
           <GlobalFooter />
         </Providers>
