@@ -2,9 +2,9 @@ import { postLikes } from '@/db/schema';
 import LikePostClient from './LikePost.client';
 import { eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
+import { ClientOnly } from '@/components/ClientOnly';
 
 export default async function LikePost({ postId }: { postId: string }) {
-  console.log(postId);
   const likes = await db.query.postLikes.findFirst({
     where: eq(postLikes.postId, postId),
   });
@@ -24,10 +24,12 @@ export default async function LikePost({ postId }: { postId: string }) {
   }
 
   return (
-    <LikePostClient
-      onLike={storeLike}
-      currentLikes={likes?.count ?? 0}
-      postId={postId}
-    />
+    <ClientOnly>
+      <LikePostClient
+        onLike={storeLike}
+        currentLikes={likes?.count ?? 0}
+        postId={postId}
+      />
+    </ClientOnly>
   );
 }
