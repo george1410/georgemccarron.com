@@ -3,12 +3,12 @@ import { YouTubeEmbed } from '@/components/YouTubeEmbed';
 import { format } from 'date-fns';
 import { useMDXComponent } from 'next-contentlayer/hooks';
 import { notFound } from 'next/navigation';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 import Image from 'next/image';
 import { AboutAuthor } from '@/components/AboutAuthor';
 import Link from 'next/link';
 import { publishedPosts } from '@/lib/posts';
-import LikePost from '@/components/LikePost';
+import LikePost, { LikePostLoading } from '@/components/LikePost';
 
 export const generateStaticParams = async () =>
   publishedPosts.map((post) => ({
@@ -76,7 +76,9 @@ export default function Page({ params }: { params: { slug: string } }) {
             }}
           />
         </div>
-        <LikePost postId={post._id} />
+        <Suspense fallback={<LikePostLoading />}>
+          <LikePost postId={post._id} />
+        </Suspense>
         <AboutAuthor />
         <Link
           href='/blog'

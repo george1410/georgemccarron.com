@@ -3,6 +3,9 @@ import LikePostClient from './LikePost.client';
 import { eq, sql } from 'drizzle-orm';
 import { db } from '@/db';
 import { ClientOnly } from '@/components/ClientOnly';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { cn } from '@/lib/cn';
 
 export default async function LikePost({ postId }: { postId: string }) {
   const likes = await db.query.postLikes.findFirst({
@@ -31,5 +34,20 @@ export default async function LikePost({ postId }: { postId: string }) {
         postId={postId}
       />
     </ClientOnly>
+  );
+}
+
+export async function LikePostLoading() {
+  return (
+    <button
+      disabled
+      className='group gap-2 mt-12 font-medium shadow-md hover:shadow-lg transition-shadow duration-200 bg-zinc-100 py-2 px-4 self-center rounded-r-full rounded-l-full flex'
+    >
+      <FontAwesomeIcon
+        icon={faSpinner}
+        spin
+        className={cn('text-2xl text-gray-300', 'group-hover:text-rose-300')}
+      />
+    </button>
   );
 }
