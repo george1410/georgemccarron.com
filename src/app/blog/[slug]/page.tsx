@@ -35,8 +35,6 @@ export const generateMetadata = ({ params }: { params: { slug: string } }) => {
   };
 };
 
-export const dynamic = 'force-dynamic';
-
 export default function Page({ params }: { params: { slug: string } }) {
   const post = publishedPosts.find((post) => post.slug === params.slug);
   if (!post) notFound();
