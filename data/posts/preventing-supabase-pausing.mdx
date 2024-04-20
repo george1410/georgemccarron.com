@@ -1,0 +1,50 @@
+---
+title: Preventing Supabase Pausing
+subtitle: A quick trick to stop Supabase pausing your database on low-traffic projects
+date: 2024-04-20
+heroImage: /images/preventing-supabase-pausing/hero.jpg
+draft: false
+---
+
+Supabase is a really nice way to get a Postgres database up and running quickly. It's free tier is more than enough for development and hobby projects, but it does have one downside: it pauses your database after 1 week of inactivity. What makes it worse is that once the database has been paused, you must manually unpause it from the Supabase dashboard. This can be a bit annoying if you're working on a low-traffic project, where a week of no traffic is a possibility.
+
+I've encountered this recently while working on a couple of NextJS apps that are deployed on Vercel, and I found this neat trick to prevent it. It simply involves creating a new API endpoint on the NextJS app that makes a request to the database, and configuring a Vercel cron job to hit that endpoint every day.
+
+Using Drizzle, my ORM of choice, the code for the API endpoint usually looks like this:
+
+```typescript showLineNumbers
+import { db } from '@/db';
+import { sql } from 'drizzle-orm';
+
+export async function GET() {
+  let dbHealth;
+  try {
+    const [res] = await db.execute<{ healthy: boolean }>(
+      sql`SELECT true as healthy`
+    );
+    dbHealth = res.healthy;
+  } catch (err) {
+    dbHealth = false;
+  }
+
+  return Response.json(
+    {
+      db: dbHealth,
+    },
+    { status: dbHealth ? 200 : 503 }
+  );
+}
+```
+
+And you can configure a Vercel cron job which runs at midnight every night with a `vercel.json` file like this (just update the `path` and `schedule` fields to match your API endpoint route and desired schedule in cron syntax):
+
+```json showLineNumbers {4-5}
+{
+  "crons": [
+    {
+      "path": "/api/health",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
+```
