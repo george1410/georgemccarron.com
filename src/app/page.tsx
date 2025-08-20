@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Me from '../../public/me.jpg';
+import Me from '../../public/me2.jpg';
 import Link from 'next/link';
 import { BlogPostGrid } from '@/components/BlogPostGrid';
 import { Timeline } from '@/components/Timeline';
