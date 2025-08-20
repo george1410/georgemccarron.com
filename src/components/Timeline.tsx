@@ -71,13 +71,20 @@ const TimelineItem = ({
   return (
     <li className='flex flex-col'>
       <div className='flex items-center'>
-        <Image
-          src={logo}
-          width={64}
-          height={64}
-          alt=''
-          className={`rounded-md border border-slate-200 mr-4 ${logoPadding}`}
-        />
+        <a
+          href={url}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='mr-4'
+        >
+          <Image
+            src={logo}
+            width={64}
+            height={64}
+            alt=''
+            className={`rounded-md border border-slate-200  ${logoPadding}`}
+          />
+        </a>
         <div>
           <h3 className='font-medium text-slate-500 flex items-baseline gap-2'>
             <span>{title}</span> -
