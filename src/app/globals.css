@@ -56,3 +56,7 @@ code[data-line-numbers] > [data-line]::before {
 [data-rehype-pretty-code-fragment] > [data-rehype-pretty-code-title] {
   @apply bg-blue-400 rounded-t-md px-6 py-2 text-[#2e3440ff] font-medium;
 }
+
+*::selection {
+  @apply bg-blue-400 text-white;
+}
