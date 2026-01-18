@@ -4,9 +4,16 @@ export const Timeline = () => {
   return (
     <ul>
       <TimelineItem
+        title='Software Engineer'
+        subtitle='incident.io'
+        date='January 2026 - Present'
+        url='https://incident.io'
+        logo='https://img.logo.dev/incident.io?token=pk_W6gl0JlERfaMoT1Au5v4Xg&retina=true&format=png&size=64'
+      />
+      <TimelineItem
         title='Senior Software Engineer'
         subtitle='Orbital'
-        date='February 2025 - Present'
+        date='February 2025 - December 2025'
         url='https://orbital.tech'
         logo='https://img.logo.dev/orbital.tech?token=pk_W6gl0JlERfaMoT1Au5v4Xg&retina=true&format=png&size=64'
       />
