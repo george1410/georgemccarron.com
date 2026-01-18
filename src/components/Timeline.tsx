@@ -4,7 +4,7 @@ export const Timeline = () => {
   return (
     <ul>
       <TimelineItem
-        title='Software Engineer'
+        title='Product Engineer'
         subtitle='incident.io'
         date='January 2026 - Present'
         url='https://incident.io'
