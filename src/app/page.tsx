@@ -16,7 +16,7 @@ export default function Home() {
 
           <p className='text-lg'>
             I&apos;m a software engineer based in London, UK. I&apos;m currently
-            building the world&apos;s first AI Real Estate Lawyer at Orbital.
+            building the single place you turn when things go wrong at incident.io.
             Sometimes I write. Sometimes I speak.
           </p>
 

@@ -14,7 +14,7 @@ export const AboutAuthor = () => {
         <h3 className='text-xl font-medium'>George McCarron</h3>
         <p>
           I&apos;m a software engineer based in London, UK. I&apos;m currently
-          building the world&apos;s first AI Real Estate Lawyer at Orbital.
+          building the single place you turn when things go wrong at incident.io.
           Sometimes I write. Sometimes I speak.
         </p>
         <SocialIcons />
