@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/cv", "destination": "/cv.pdf" },
+    { "source": "/dissertation", "destination": "/dissertation.pdf" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
