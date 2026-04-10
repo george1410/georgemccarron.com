@@ -31,7 +31,7 @@ export const timeline: TimelineEntry[] = [
     companyDescription:
       "AI-powered platform automating review and reporting of real-estate legal documents.",
     excerpt:
-      "Built Orbital Copilot from scratch as part of the founding team, scaling it from $0 to $6m+ ARR across the UK and US. Grew the engineering org from ~5 to 30+.",
+      "Built Orbital Copilot from scratch as part of the founding team, scaling it from zero to significant ARR across the UK and US.",
     url: "https://orbital.tech",
     logo: "https://img.logo.dev/orbital.tech?token=pk_W6gl0JlERfaMoT1Au5v4Xg&retina=true&format=png&size=64",
     roles: [
