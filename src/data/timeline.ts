@@ -31,7 +31,7 @@ export const timeline: TimelineEntry[] = [
     companyDescription:
       "AI-powered platform automating review and reporting of real-estate legal documents.",
     excerpt:
-      "Built Orbital Copilot from scratch as part of the founding team, scaling it from zero to significant ARR across the UK and US.",
+      "Built Orbital Copilot from scratch as part of the founding team, scaling it across the UK and US.",
     url: "https://orbital.tech",
     logo: "https://img.logo.dev/orbital.tech?token=pk_W6gl0JlERfaMoT1Au5v4Xg&retina=true&format=png&size=64",
     roles: [
@@ -45,7 +45,7 @@ export const timeline: TimelineEntry[] = [
     companyDescription:
       "Free credit score and financial marketplace serving 20 million+ users worldwide.",
     excerpt:
-      "Full-stack TypeScript across React and Node.js. Led reliability improvements to core marketplace architecture and introduced Nx to optimise the CI/CD pipeline.",
+      "Full-stack TypeScript across React and Node.js. Delivered reliability improvements to core marketplace architecture and shipped experiments to increase revenue.",
     url: "https://clearscore.com",
     logo: "https://img.logo.dev/clearscore.com?token=pk_W6gl0JlERfaMoT1Au5v4Xg&retina=true&format=png&size=64",
     logoBg: true,
