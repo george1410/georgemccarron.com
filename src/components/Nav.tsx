@@ -45,7 +45,8 @@ export function Nav() {
           viewTransition
           className="font-serif italic text-lg text-stone-800 dark:text-zinc-100 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
         >
-          George McCarron
+          <span className="sm:hidden">GM</span>
+          <span className="hidden sm:inline">George McCarron</span>
         </Link>
         <div className="flex items-center gap-6">
           <NavLink to="/" end viewTransition className={navLinkClass}>
