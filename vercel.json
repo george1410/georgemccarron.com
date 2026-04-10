@@ -1,8 +1,6 @@
 {
-  "crons": [
-    {
-      "path": "/api/health",
-      "schedule": "0 0 * * *"
-    }
+  "rewrites": [
+    { "source": "/cv", "destination": "/cv.pdf" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

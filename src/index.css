@@ -1,0 +1,176 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+}
+
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+body {
+  background-color: #faf8f5;
+  color: var(--color-stone-600);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dark body {
+  background-color: var(--color-zinc-900);
+  color: var(--color-zinc-400);
+}
+
+::selection {
+  @apply bg-orange-200 text-orange-900;
+}
+
+.dark ::selection {
+  background: rgb(249 115 22 / 0.3);
+  color: var(--color-orange-100);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #f97316, #e11d48, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-animated {
+  background: linear-gradient(135deg, #f97316, #e11d48, #8b5cf6, #f97316);
+  background-size: 300% 300%;
+  animation: gradient-shift 8s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Prose link styles */
+.prose a {
+  @apply text-orange-600 no-underline hover:text-orange-500 transition-colors font-medium;
+}
+.prose a:hover {
+  @apply underline decoration-orange-300;
+}
+.dark .prose a {
+  @apply text-orange-400 hover:text-orange-300;
+}
+.dark .prose a:hover {
+  @apply decoration-orange-600;
+}
+
+/* Prose inline code */
+.prose :where(code):not(:where(pre code)) {
+  @apply bg-stone-100 text-stone-800 px-1.5 py-0.5 rounded-md text-sm font-normal border border-stone-200/60;
+}
+.prose :where(code):not(:where(pre code))::before,
+.prose :where(code):not(:where(pre code))::after {
+  content: none;
+}
+.dark .prose :where(code):not(:where(pre code)) {
+  @apply bg-zinc-800 text-zinc-200 border-zinc-700;
+}
+
+/* Code blocks */
+pre {
+  @apply !rounded-xl !shadow-sm border border-stone-200/60 !px-0 !py-4;
+}
+.dark pre {
+  @apply border-zinc-800/60 !shadow-none;
+}
+
+code {
+  @apply !text-sm !leading-relaxed;
+}
+
+code[data-line-numbers] {
+  counter-reset: line;
+}
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1rem;
+  margin-right: 1.5rem;
+  text-align: right;
+  color: #6e7681;
+}
+
+[data-line] {
+  @apply px-4;
+}
+[data-highlighted-line] {
+  background: rgba(249, 115, 22, 0.07);
+  border-left: 2px solid var(--color-orange-400);
+  padding-left: calc(1rem - 2px);
+}
+.dark [data-highlighted-line] {
+  background: rgba(249, 115, 22, 0.1);
+}
+.dark [data-highlighted-line] {
+  background: rgba(249, 115, 22, 0.1);
+}
+
+/* Prose images & misc */
+/* View transitions */
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(15px); }
+}
+
+::view-transition-old(root) {
+  animation: 120ms ease-out both fade-out;
+}
+::view-transition-new(root) {
+  animation: 200ms ease-out both slide-up;
+}
+
+::view-transition-old(nav),
+::view-transition-new(nav),
+::view-transition-old(footer),
+::view-transition-new(footer) {
+  animation: none;
+}
+
+::view-transition-group(post-hero) {
+  animation-duration: 350ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+::view-transition-old(post-hero),
+::view-transition-new(post-hero) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+.prose img {
+  @apply rounded-xl shadow-sm;
+}
+.prose hr {
+  @apply border-stone-200;
+}
+.dark .prose hr {
+  @apply border-zinc-800;
+}
+.prose blockquote {
+  @apply border-orange-300 bg-orange-50/50 rounded-r-lg pr-4 py-1;
+}
+.dark .prose blockquote {
+  @apply border-orange-500/40 bg-orange-950/20;
+}
