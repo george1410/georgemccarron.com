@@ -75,7 +75,7 @@ export function Home() {
         <div className="space-y-6">
           {featured && <FeaturedPostCard post={featured} />}
           <div className="grid gap-6 grid-cols-1 sm:grid-cols-3">
-            {rest.map((post) => (
+            {rest.slice(0, 3).map((post) => (
               <PostCard key={post.slug} post={post} />
             ))}
           </div>
