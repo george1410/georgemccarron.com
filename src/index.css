@@ -57,6 +57,44 @@ body {
   50% { background-position: 100% 50%; }
 }
 
+/* Map loading shimmer — a diagonal band sweeps across the map area. */
+@keyframes map-shimmer {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(50%); }
+}
+.map-shimmer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.map-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: -50% 0;
+  width: 200%;
+  background-image: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(249, 115, 22, 0.14) 30%,
+    rgba(225, 29, 72, 0.14) 50%,
+    rgba(139, 92, 246, 0.14) 70%,
+    transparent 100%
+  );
+  animation: map-shimmer 1.1s linear infinite;
+  will-change: transform;
+}
+.dark .map-shimmer::after {
+  background-image: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(249, 115, 22, 0.2) 30%,
+    rgba(225, 29, 72, 0.2) 50%,
+    rgba(139, 92, 246, 0.2) 70%,
+    transparent 100%
+  );
+}
+
 /* Prose link styles */
 .prose a {
   @apply text-orange-600 no-underline hover:text-orange-500 transition-colors font-medium;

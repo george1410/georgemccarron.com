@@ -131,6 +131,7 @@ export function Home() {
         </h2>
         <Timeline />
       </section>
+
     </div>
   );
 }

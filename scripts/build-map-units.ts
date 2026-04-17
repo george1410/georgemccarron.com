@@ -45,7 +45,7 @@ const MERGE: Record<string, string[]> = {
   "Bosnia and Herz.": ["Fed. of Bos. & Herz.", "Rep. Srpska"],
   Serbia: ["Serbia", "Vojvodina"],
   Iraq: ["Iraq", "Iraqi Kurdistan"],
-  Somalia: ["Somalia", "Puntland"],
+  Somalia: ["Somalia", "Puntland", "Somaliland"],
   Georgia: ["Georgia", "Adjara"],
   Kazakhstan: ["Kazakhstan", "Baikonur"],
   Tanzania: ["Tanzania", "Zanzibar"],
@@ -55,6 +55,10 @@ const MERGE: Record<string, string[]> = {
   "South Korea": ["South Korea", "Korean DMZ (south)"],
   Syria: ["Syria", "UNDOF Zone"],
   "Antigua and Barbuda": ["Antigua", "Barbuda"],
+  // Cyprus: treat the whole island as one — southern Republic, N. Cyprus,
+  // the UN Buffer Zone, and the two British Sovereign Base Areas (Dhekelia
+  // and Akrotiri) all sit on the same island.
+  Cyprus: ["Cyprus", "N. Cyprus", "Cyprus U.N. Buffer Zone", "Dhekelia", "Akrotiri"],
 };
 
 // Drop features that either aren't rendered (Antarctica, French S. Antarctic
@@ -78,9 +82,12 @@ const DROP = new Set([
   "Howland I.",
   "Baker I.",
   "Palmyra Atoll",
+  "Navassa I.",
+  "Johnston Atoll",
   "Spratly Is.",
   "Paracel Is.",
   "Heard I. and McDonald Is.",
+  "Siachen Glacier",
 ]);
 
 // Minimal shape of the Natural Earth properties we care about.
@@ -149,12 +156,13 @@ for (const [target, sources] of Object.entries(MERGE)) {
 }
 console.log(`  merged ${mergedCount} source features into ${Object.keys(MERGE).length} targets.`);
 
-console.log("Simplifying (barely)...");
-topo = presimplify(topo);
-topo = simplify(topo, 2e-4); // gentle — visible coastlines preserved
-
-console.log("Quantizing...");
-topo = quantize(topo, 1e6);
+// Simplification disabled. Even gentle simplify() at 1e-4 shifts vertices on
+// Canada's southern border and opens a visible gap against the us-atlas
+// states (which come from a different source). Topology is already quantized
+// at creation — no re-quantize needed.
+void presimplify;
+void simplify;
+void quantize;
 
 delete topo.bbox; // we never read this on the client
 

@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "build:map": "tsx scripts/build-map-units.ts"
+    "build:map": "tsx scripts/build-map-units.ts",
+    "spotify:auth": "tsx scripts/spotify-auth.ts"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
