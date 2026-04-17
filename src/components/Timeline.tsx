@@ -1,22 +1,81 @@
+import { useEffect, useRef, useState } from "react";
 import { timeline } from "../data/timeline";
 
 export function Timeline() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState<Set<number>>(new Set());
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (prefersReducedMotion) {
+      setVisible(new Set(timeline.map((_, i) => i)));
+      return;
+    }
+
+    const items = containerRef.current?.querySelectorAll<HTMLElement>(
+      "[data-timeline-item]",
+    );
+    if (!items) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setVisible((prev) => {
+          const next = new Set(prev);
+          let changed = false;
+          entries.forEach((entry) => {
+            const index = Number(
+              (entry.target as HTMLElement).dataset.timelineItem,
+            );
+            if (entry.isIntersecting && !next.has(index)) {
+              next.add(index);
+              changed = true;
+            } else if (!entry.isIntersecting && next.has(index)) {
+              next.delete(index);
+              changed = true;
+            }
+          });
+          return changed ? next : prev;
+        });
+      },
+      { threshold: 0, rootMargin: "-20% 0px -20% 0px" },
+    );
+
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       {/* Center line — desktop only */}
       <div className="absolute left-1/2 top-0 bottom-0 w-px bg-stone-200 dark:bg-zinc-700/50 hidden sm:block" />
 
       <div className="space-y-5 sm:space-y-8">
         {timeline.map((entry, i) => {
           const isLeft = i % 2 === 0;
+          const isVisible = visible.has(i);
           return (
-            <div key={i} className="relative">
+            <div
+              key={i}
+              data-timeline-item={i}
+              className="relative"
+            >
               {/* Dot on the center line */}
-              <div className="absolute left-1/2 top-6 -translate-x-1/2 w-3 h-3 rounded-full bg-orange-400 ring-4 ring-[#faf8f5] dark:ring-zinc-900 z-10 hidden sm:block" />
+              <div
+                className={`absolute left-1/2 top-6 -translate-x-1/2 w-3 h-3 rounded-full bg-orange-400 ring-4 ring-[#faf8f5] dark:ring-zinc-900 z-10 hidden sm:block transition-all duration-500 ease-out ${
+                  isVisible ? "opacity-100 scale-100" : "opacity-0 scale-50"
+                }`}
+                style={{ transitionDelay: isVisible ? "120ms" : "0ms" }}
+              />
 
               {/* Card */}
               <div
-                className={`sm:w-[calc(50%-2rem)] ${isLeft ? "" : "sm:ml-auto"}`}
+                className={`sm:w-[calc(50%-2rem)] ${isLeft ? "" : "sm:ml-auto"} transition-all duration-700 ease-out ${
+                  isVisible
+                    ? "opacity-100 translate-y-0 sm:translate-x-0"
+                    : `opacity-0 translate-y-6 ${isLeft ? "sm:-translate-x-6 sm:translate-y-0" : "sm:translate-x-6 sm:translate-y-0"}`
+                }`}
               >
                 <a
                   href={entry.url}
