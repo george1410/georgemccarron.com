@@ -1,5 +1,7 @@
 import { Outlet, useLocation } from "react-router";
 import { useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Nav } from "./Nav";
 import { Footer } from "./Footer";
 import { CommandPalette } from "./CommandPalette";
@@ -22,6 +24,8 @@ export function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <Analytics />
+      <SpeedInsights />
     </div>
   );
 }
