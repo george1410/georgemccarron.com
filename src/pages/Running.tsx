@@ -138,9 +138,6 @@ export function Running() {
         <h1 className="font-serif italic text-5xl md:text-7xl leading-[0.95] tracking-tight">
           <span className="gradient-text-animated">Running</span>
         </h1>
-        <p className="mt-6 text-lg text-stone-500 dark:text-zinc-400 leading-relaxed max-w-xl">
-          Every squiggle below is a real route, pulled fresh from Strava.
-        </p>
       </section>
       {body}
     </div>
