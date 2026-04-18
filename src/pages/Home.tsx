@@ -4,6 +4,7 @@ import { SocialLinks } from "../components/SocialLinks";
 import { PostCard, FeaturedPostCard } from "../components/PostCard";
 import { Timeline } from "../components/Timeline";
 import { NowPlaying } from "../components/NowPlaying";
+import { Contributions } from "../components/Contributions";
 import { YouTubeEmbed } from "../components/YouTubeEmbed";
 import { posts } from "../data/posts";
 import { talks } from "../data/talks";
@@ -126,6 +127,14 @@ export function Home() {
             </p>
             </div>
         </div>
+      </section>
+
+      {/* Code */}
+      <section>
+        <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-zinc-500 mb-8">
+          Code
+        </h2>
+        <Contributions />
       </section>
 
       {/* Timeline */}
