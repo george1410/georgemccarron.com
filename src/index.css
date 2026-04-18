@@ -50,6 +50,10 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  /* Italic glyphs overshoot their advance width; without this the gradient
+     clip ends before the trailing ink, chopping off the end of the last
+     character. */
+  padding-right: 0.08em;
 }
 
 @keyframes gradient-shift {

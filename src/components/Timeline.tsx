@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { timeline } from "../data/timeline";
 
+// Shared helper so CommandPalette can target the same id.
+export function timelineEntryId(company: string): string {
+  return `timeline-${company.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+}
+
 export function Timeline() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState<Set<number>>(new Set());
@@ -58,8 +63,9 @@ export function Timeline() {
           return (
             <div
               key={i}
+              id={timelineEntryId(entry.company)}
               data-timeline-item={i}
-              className="relative"
+              className="relative scroll-mt-24"
             >
               {/* Dot on the center line */}
               <div
