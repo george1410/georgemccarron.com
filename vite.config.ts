@@ -179,6 +179,65 @@ function vercelApiDev(): Plugin {
   };
 }
 
+// Builds an RSS 2.0 feed from the blog posts list. Served at /rss.xml in
+// both dev and the final build.
+function generateRssXml(): string {
+  const items = posts
+    .map((p) => {
+      const url = `${SITE_URL}/blog/${p.slug}`;
+      const pubDate = new Date(p.date).toUTCString();
+      return `    <item>
+      <title>${escapeHtml(p.title)}</title>
+      <link>${url}</link>
+      <guid isPermaLink="true">${url}</guid>
+      <pubDate>${pubDate}</pubDate>
+      <description>${escapeHtml(p.subtitle)}</description>
+    </item>`;
+    })
+    .join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>George McCarron</title>
+    <link>${SITE_URL}</link>
+    <description>Writing from George McCarron — software engineer at incident.io.</description>
+    <language>en</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
+${items}
+  </channel>
+</rss>
+`;
+}
+
+function rssFeed(): Plugin {
+  return {
+    name: "rss-feed",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const pathname = req.url?.split("?")[0];
+        if (pathname === "/rss.xml" || pathname === "/feed.xml") {
+          res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
+          res.end(generateRssXml());
+          return;
+        }
+        next();
+      });
+    },
+    async closeBundle() {
+      if (this.meta?.watchMode) return;
+      const fs = await import("node:fs/promises");
+      const path = await import("node:path");
+      await fs.writeFile(
+        path.resolve("dist", "rss.xml"),
+        generateRssXml(),
+        "utf-8",
+      );
+    },
+  };
+}
+
 function generateOgPages(): Plugin {
   return {
     name: "generate-og-pages",
@@ -279,6 +338,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     vercelApiDev(),
+    rssFeed(),
     generateOgPages(),
   ],
 });
