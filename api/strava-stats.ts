@@ -97,6 +97,16 @@ function json(body: StravaStatsResponse, status = 200) {
   });
 }
 
+function errorResponse(message: string) {
+  return new Response(JSON.stringify({ error: message }), {
+    status: 500,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
 export default async function handler(): Promise<Response> {
   try {
     const accessToken = await getAccessToken();
@@ -141,8 +151,6 @@ export default async function handler(): Promise<Response> {
     return json({ runs: { count, distance, movingTime, elevationGain } });
   } catch (err) {
     console.error("[api/strava-stats]", err);
-    return json({
-      runs: { count: 0, distance: 0, movingTime: 0, elevationGain: 0 },
-    });
+    return errorResponse("Strava stats unavailable");
   }
 }

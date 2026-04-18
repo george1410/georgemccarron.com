@@ -30,7 +30,7 @@ function formatDate(iso: string): string {
 }
 
 export function Contributions() {
-  const { data, isLoading } = useQuery<ContribResponse>({
+  const { data, isLoading, isError } = useQuery<ContribResponse>({
     queryKey: ["githubContributions"],
     queryFn: async () => {
       const res = await fetch("/api/github");
@@ -75,6 +75,7 @@ export function Contributions() {
     });
   }
 
+  if (isError) return <ErrorCard />;
   if (isLoading || !data || data.weeks.length === 0) {
     return <LoadingSkeleton />;
   }
@@ -254,6 +255,19 @@ const GITHUB_USERNAME = "george1410";
 // Skeleton shown while the initial /api/github fetch is in flight. Mirrors
 // the real card's shape so the transition feels like content filling in
 // rather than a replacement.
+function ErrorCard() {
+  return (
+    <div className="bg-white dark:bg-zinc-800/50 rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-none dark:border dark:border-zinc-700/50">
+      <p className="text-sm text-stone-600 dark:text-zinc-300 font-medium">
+        Couldn't reach GitHub right now.
+      </p>
+      <p className="mt-1 text-xs text-stone-500 dark:text-zinc-400">
+        The contribution graph will come back as soon as the API does.
+      </p>
+    </div>
+  );
+}
+
 function LoadingSkeleton() {
   const WEEKS = 53;
   return (

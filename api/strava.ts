@@ -136,6 +136,16 @@ function json(body: StravaActivitiesResponse, status = 200) {
   });
 }
 
+function errorResponse(message: string) {
+  return new Response(JSON.stringify({ error: message }), {
+    status: 500,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
 export default async function handler(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const count = Math.max(1, Math.min(60, Number(url.searchParams.get("count")) || 15));
@@ -205,6 +215,6 @@ export default async function handler(request: Request): Promise<Response> {
     return json({ runs, nextCursor });
   } catch (err) {
     console.error("[api/strava]", err);
-    return json({ runs: [], nextCursor: null });
+    return errorResponse("Strava unavailable");
   }
 }

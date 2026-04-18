@@ -40,6 +40,16 @@ function json(body: ContribResponse, status = 200) {
   });
 }
 
+function errorResponse(message: string) {
+  return new Response(JSON.stringify({ error: message }), {
+    status: 500,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
 // Group flat cells (sorted by date) into GitHub-style weeks starting on
 // Sunday. A partial first week is allowed.
 function cellsToWeeks(
@@ -106,7 +116,7 @@ export default async function handler(): Promise<Response> {
 
   if (!user) {
     console.error("[api/github] Missing GITHUB_USERNAME env var");
-    return json({ totalContributions: 0, weeks: [] });
+    return errorResponse("GitHub not configured");
   }
 
   // Leaving `from`/`to` off returns GitHub's "in the last year" view,
@@ -130,6 +140,6 @@ export default async function handler(): Promise<Response> {
     return json(parseHtml(html));
   } catch (err) {
     console.error("[api/github]", err);
-    return json({ totalContributions: 0, weeks: [] });
+    return errorResponse("GitHub unavailable");
   }
 }

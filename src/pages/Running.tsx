@@ -81,7 +81,8 @@ export function Running() {
 
   const body = (() => {
     if (isLoading) return <LoadingSkeleton />;
-    if (isError || runs.length === 0) return <EmptyMessage />;
+    if (isError) return <ErrorMessage />;
+    if (runs.length === 0) return <EmptyMessage />;
     return (
       <>
         {/* All-time stats */}
@@ -420,5 +421,18 @@ function EmptyMessage() {
     <p className="text-stone-500 dark:text-zinc-400">
       Nothing to show right now — check back after the next run.
     </p>
+  );
+}
+
+function ErrorMessage() {
+  return (
+    <div className="bg-white dark:bg-zinc-800/50 rounded-2xl p-6 shadow-sm dark:shadow-none dark:border dark:border-zinc-700/50">
+      <p className="text-stone-600 dark:text-zinc-300 font-medium">
+        Couldn't reach Strava right now.
+      </p>
+      <p className="mt-1 text-sm text-stone-500 dark:text-zinc-400">
+        Give it a minute and refresh — the runs will be back.
+      </p>
+    </div>
   );
 }

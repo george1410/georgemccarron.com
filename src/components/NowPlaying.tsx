@@ -13,7 +13,7 @@ type Variant = "hero" | "compact";
 export function NowPlaying({ variant = "compact" }: { variant?: Variant } = {}) {
   // react-query dedupes and polls for every instance sharing this key, so
   // the hero card and footer row stay in lockstep with one fetch loop.
-  const { data: track } = useQuery<NowPlayingTrack>({
+  const { data: track, isError } = useQuery<NowPlayingTrack>({
     queryKey: ["nowPlaying"],
     queryFn: async () => {
       const res = await fetch("/api/spotify");
@@ -24,6 +24,10 @@ export function NowPlaying({ variant = "compact" }: { variant?: Variant } = {}) 
     staleTime: 25_000,
     refetchOnWindowFocus: false,
   });
+
+  // Spotify is best-effort — if the endpoint errors, just hide the widget
+  // rather than stretching a skeleton forever.
+  if (isError) return null;
 
   // Initial fetch hasn't returned yet — show a skeleton so the layout
   // doesn't flash in once data arrives.

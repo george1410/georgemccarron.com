@@ -80,6 +80,16 @@ function json(body: NowPlayingTrack, status = 200) {
   });
 }
 
+function errorResponse(message: string) {
+  return new Response(JSON.stringify({ error: message }), {
+    status: 500,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
 export default async function handler(): Promise<Response> {
   try {
     const accessToken = await getAccessToken();
@@ -117,9 +127,7 @@ export default async function handler(): Promise<Response> {
 
     return json({ isPlaying: false });
   } catch (err) {
-    // Never leak the error to the client — just hide the widget. Sentry
-    // still sees it via the console-capture integration.
     console.error("[api/spotify]", err);
-    return json({ isPlaying: false });
+    return errorResponse("Spotify unavailable");
   }
 }
