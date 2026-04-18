@@ -43,6 +43,73 @@ function formatDate(date: string): string {
   });
 }
 
+function AdjacentPostCard({
+  post,
+  direction,
+}: {
+  post: (typeof posts)[number];
+  direction: "newer" | "older";
+}) {
+  const isOlder = direction === "older";
+  return (
+    <Link
+      to={`/blog/${post.slug}`}
+      viewTransition
+      className={`group relative block overflow-hidden bg-white dark:bg-zinc-800/50 rounded-2xl shadow-sm dark:shadow-none dark:border dark:border-zinc-700/50 hover:shadow-xl dark:hover:shadow-black/30 dark:hover:border-zinc-600/50 hover:-translate-y-0.5 transition-all duration-300 ${
+        isOlder ? "sm:text-right" : ""
+      }`}
+    >
+      {/* Subtle colour wash on hover — matches the hero / featured-run
+          treatment elsewhere on the site. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-4 bg-gradient-to-br from-orange-400 via-rose-400 to-violet-500 opacity-0 group-hover:opacity-20 blur-3xl transition-opacity duration-500 -z-10"
+      />
+
+      <div
+        className={`flex items-center gap-4 p-4 ${isOlder ? "flex-row-reverse" : ""}`}
+      >
+        <img
+          src={post.heroImage}
+          alt=""
+          className="w-20 h-20 rounded-xl object-cover flex-shrink-0 shadow-sm dark:shadow-none group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="min-w-0 flex-1">
+          <div
+            className={`flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-zinc-500 ${
+              isOlder ? "justify-end" : ""
+            }`}
+          >
+            {!isOlder && (
+              <span
+                aria-hidden="true"
+                className="group-hover:-translate-x-0.5 transition-transform"
+              >
+                ←
+              </span>
+            )}
+            <span>{isOlder ? "Older" : "Newer"}</span>
+            {isOlder && (
+              <span
+                aria-hidden="true"
+                className="group-hover:translate-x-0.5 transition-transform"
+              >
+                →
+              </span>
+            )}
+          </div>
+          <div className="mt-1.5 font-semibold text-stone-900 dark:text-zinc-50 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors leading-snug line-clamp-2">
+            {post.title}
+          </div>
+          <div className="mt-1 text-xs text-stone-500 dark:text-zinc-400 line-clamp-1">
+            {post.subtitle}
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
 export function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const [Content, setContent] = useState<ComponentType<{
@@ -53,7 +120,15 @@ export function BlogPost() {
 
   const proseRef = useRef<HTMLDivElement>(null);
 
-  const post = posts.find((p) => p.slug === slug);
+  const postIndex = posts.findIndex((p) => p.slug === slug);
+  const post = postIndex >= 0 ? posts[postIndex] : undefined;
+  // `posts` is ordered newest → oldest. So the previous entry in the
+  // array is the more recent post and the next entry is the older one.
+  const newerPost = postIndex > 0 ? posts[postIndex - 1] : undefined;
+  const olderPost =
+    postIndex >= 0 && postIndex < posts.length - 1
+      ? posts[postIndex + 1]
+      : undefined;
   useTitle(post?.title ?? "Blog");
 
   useEffect(() => {
@@ -154,6 +229,26 @@ export function BlogPost() {
         ) : null}
 
         {!loading && <ShareButtons title={post.title} />}
+
+        {/* Prev / next navigation — only rendered when at least one side
+            has a post to link to. */}
+        {(newerPost || olderPost) && (
+          <nav
+            aria-label="Other posts"
+            className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-4"
+          >
+            {newerPost ? (
+              <AdjacentPostCard post={newerPost} direction="newer" />
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+            {olderPost ? (
+              <AdjacentPostCard post={olderPost} direction="older" />
+            ) : (
+              <div className="hidden sm:block" />
+            )}
+          </nav>
+        )}
 
         {/* Author */}
         <div className="mt-14 pt-8 border-t border-stone-200 dark:border-zinc-800">
