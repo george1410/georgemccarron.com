@@ -58,9 +58,7 @@ type ListEntry = {
   status: Status;
 };
 
-type Variant = "card" | "fullbleed";
-
-export function WorldMap({ variant = "card" }: { variant?: Variant } = {}) {
+export function WorldMap() {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const gRef = useRef<SVGGElement>(null);
@@ -348,15 +346,12 @@ export function WorldMap({ variant = "card" }: { variant?: Variant } = {}) {
   );
 
   const cursorClass = isPanning ? "cursor-grabbing" : "cursor-grab";
+  const loaded = !!paths;
   const svg = (
     <svg
       ref={svgRef}
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-      className={`${
-        variant === "fullbleed"
-          ? "absolute inset-0 w-full h-full"
-          : "w-full h-auto"
-      } text-[#faf8f5] dark:text-zinc-900 touch-none select-none ${cursorClass}`}
+      className={`absolute inset-0 w-full h-full text-[#faf8f5] dark:text-zinc-900 touch-none select-none ${cursorClass} transition-opacity duration-500 ease-out ${loaded ? "opacity-100" : "opacity-0"}`}
       shapeRendering="geometricPrecision"
       role="img"
       aria-label={`World map. ${countryCount} countries and ${stateCount} US states visited.`}
@@ -554,23 +549,20 @@ export function WorldMap({ variant = "card" }: { variant?: Variant } = {}) {
     </div>
   );
 
-  if (variant === "fullbleed") {
-    return (
-      <div
-        ref={containerRef}
-        className={`relative w-full h-[calc(100svh-3.5rem)] bg-[#faf8f5] dark:bg-zinc-900 overflow-hidden ${cursorClass}`}
-        onMouseLeave={() => setHover(null)}
-      >
-        {/* Loading shimmer — signals "map is coming" while the topojson
-            fetches. Sits beneath the SVG so it cross-fades out when paths
-            start rendering. */}
-        {!paths && (
-          <div
-            className="map-shimmer"
-            aria-label="Loading map"
-            role="status"
-          />
-        )}
+  return (
+    <div
+      ref={containerRef}
+      className={`relative w-full h-[calc(100svh-3.5rem)] bg-[#faf8f5] dark:bg-zinc-900 overflow-hidden ${cursorClass}`}
+      onMouseLeave={() => setHover(null)}
+    >
+        {/* Loading shimmer — fades out as the SVG fades in, so the
+            transition feels continuous rather than a hard swap. */}
+        <div
+          className={`map-shimmer transition-opacity duration-500 ease-out ${loaded ? "opacity-0" : "opacity-100"}`}
+          aria-label="Loading map"
+          role="status"
+          aria-hidden={loaded}
+        />
 
         {svg}
 
@@ -673,33 +665,7 @@ export function WorldMap({ variant = "card" }: { variant?: Variant } = {}) {
           </div>
         </div>
 
-        {tooltip}
-      </div>
-    );
-  }
-
-  // card variant
-  return (
-    <div
-      ref={containerRef}
-      className="relative bg-white dark:bg-zinc-800/50 rounded-2xl shadow-sm dark:shadow-none dark:border dark:border-zinc-700/50 p-4 sm:p-6 overflow-hidden"
-      onMouseLeave={() => setHover(null)}
-    >
-      <div
-        className={`relative overflow-hidden rounded-xl ${cursorClass}`}
-      >
-        {!paths && (
-          <div
-            className="map-shimmer"
-            aria-label="Loading map"
-            role="status"
-          />
-        )}
-        {svg}
-        <div className="absolute top-3 right-3">{zoomControls}</div>
-      </div>
       {tooltip}
-      <div className="mt-4">{stats}</div>
     </div>
   );
 }

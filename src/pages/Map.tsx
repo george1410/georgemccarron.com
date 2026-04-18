@@ -3,5 +3,5 @@ import { WorldMap } from "../components/WorldMap";
 
 export function MapPage() {
   useTitle("Travel");
-  return <WorldMap variant="fullbleed" />;
+  return <WorldMap />;
 }
