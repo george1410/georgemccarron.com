@@ -1,14 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router";
 import { ThemeToggle } from "./ThemeToggle";
 
-const links = [
-  { to: "/", label: "Home", end: true },
-  { to: "/blog", label: "Blog", end: false },
-  { to: "/speaking", label: "Speaking", end: false },
-  { to: "/map", label: "Map", end: false },
-  { to: "/running", label: "Running", end: false },
-  { to: "/changelog", label: "Changelog", end: false },
+// Primary nav items sit inline on desktop. Secondary items live under a
+// "More" dropdown to keep the bar uncluttered. Mobile flattens everything
+// into the hamburger menu.
+const primaryLinks = [
+  { to: "/blog", label: "Blog" },
+  { to: "/speaking", label: "Speaking" },
+] as const;
+
+const secondaryLinks = [
+  { to: "/map", label: "Map" },
+  { to: "/running", label: "Running" },
+  { to: "/changelog", label: "Changelog" },
 ] as const;
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
@@ -92,6 +97,94 @@ function HamburgerButton({
   );
 }
 
+function MoreDropdown() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
+
+  // Close whenever the route changes (so clicking a link inside closes).
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  // Close on outside click and on escape.
+  useEffect(() => {
+    if (!open) return;
+    function onPointer(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onPointer);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointer);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  // Show an "active" style on the More trigger itself when any of the
+  // secondary routes is currently active.
+  const secondaryActive = secondaryLinks.some((l) => pathname.startsWith(l.to));
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-haspopup="menu"
+        className={`inline-flex items-center gap-1 cursor-pointer transition-colors ${
+          secondaryActive
+            ? "text-stone-900 dark:text-zinc-50 font-semibold"
+            : "text-stone-400 hover:text-stone-600 dark:text-zinc-500 dark:hover:text-zinc-300"
+        }`}
+      >
+        <span>More</span>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={`w-3 h-3 transition-transform ${open ? "rotate-180" : ""}`}
+          aria-hidden="true"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 top-full mt-2 min-w-[9rem] py-1 bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-xl shadow-lg shadow-stone-900/10 dark:shadow-black/30"
+        >
+          {secondaryLinks.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              viewTransition
+              role="menuitem"
+              className={({ isActive }) =>
+                `block px-4 py-2 text-sm transition-colors ${
+                  isActive
+                    ? "text-stone-900 dark:text-zinc-50 font-semibold"
+                    : "text-stone-500 dark:text-zinc-400 hover:text-orange-600 dark:hover:text-orange-400"
+                }`
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function Nav() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -110,6 +203,8 @@ export function Nav() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
+  const allLinks = [...primaryLinks, ...secondaryLinks];
+
   return (
     <header
       className="fixed top-0 w-full bg-[#faf8f5]/80 dark:bg-zinc-900/80 backdrop-blur-xl border-b border-stone-200/40 dark:border-zinc-800/40 z-50"
@@ -125,19 +220,19 @@ export function Nav() {
           <span className="hidden sm:inline">George McCarron</span>
         </Link>
 
-        {/* Desktop: all nav items inline */}
+        {/* Desktop: primary nav items inline, rest in a More dropdown. */}
         <div className="hidden sm:flex items-center gap-6">
-          {links.map((l) => (
+          {primaryLinks.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
-              end={l.end}
               viewTransition
               className={navLinkClass}
             >
               {l.label}
             </NavLink>
           ))}
+          <MoreDropdown />
           <CmdKButton />
           <ThemeToggle />
         </div>
@@ -149,18 +244,19 @@ export function Nav() {
         </div>
       </nav>
 
-      {/* Mobile dropdown — slides in below the nav bar */}
+      {/* Mobile dropdown — slides in below the nav bar. Flattens primary
+          and secondary links into a single list, since there's no need
+          for a "More" sub-menu when we already have the hamburger. */}
       <div
         className={`sm:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-out ${
           open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="px-6 py-3 border-t border-stone-200/40 dark:border-zinc-800/40">
-          {links.map((l) => (
+          {allLinks.map((l) => (
             <NavLink
               key={l.to}
               to={l.to}
-              end={l.end}
               viewTransition
               className={mobileLinkClass}
             >

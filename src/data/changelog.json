@@ -1,10 +1,16 @@
 {
   "entries": [
     {
+      "date": "2026-04-18T22:34:15+01:00",
+      "title": "Navigation menu collapse to \"more\"",
+      "summary": "Reorganized the navigation to hide secondary items behind a \"more\" dropdown on smaller screens. Keeps the header cleaner without sacrificing access to anything.",
+      "hash": "d8430aa"
+    },
+    {
       "date": "2026-04-18T22:27:22+01:00",
-      "title": "Added automated changelog system",
-      "summary": "Built a changelog page that auto-generates from git commits. Uses a post-commit hook to capture structured changelog entries, making it easier to track what's changed without manual updates.",
-      "hash": "3d104ae"
+      "title": "Automated changelog tracking",
+      "summary": "Set up a system to automatically generate changelog entries from git commits. Now when I commit with a special format, the changelog page updates without manual editing.",
+      "hash": "7a01383"
     },
     {
       "date": "2026-04-18T21:29:35+01:00",
