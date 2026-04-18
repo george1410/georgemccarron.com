@@ -16,6 +16,29 @@ export const config = {
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const NOW_PLAYING_URL =
   "https://api.spotify.com/v1/me/player/currently-playing";
+const RECENTLY_PLAYED_URL =
+  "https://api.spotify.com/v1/me/player/recently-played?limit=1";
+
+type SpotifyTrack = {
+  name?: string;
+  artists?: { name: string }[];
+  album?: {
+    name?: string;
+    images?: { url: string }[];
+  };
+  external_urls?: { spotify?: string };
+};
+
+function formatTrack(track: SpotifyTrack, isPlaying: boolean): NowPlayingTrack {
+  return {
+    isPlaying,
+    title: track.name,
+    artist: track.artists?.map((a) => a.name).join(", "),
+    album: track.album?.name,
+    albumImageUrl: track.album?.images?.[0]?.url,
+    songUrl: track.external_urls?.spotify,
+  };
+}
 
 async function getAccessToken(): Promise<string> {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
@@ -59,40 +82,39 @@ function json(body: NowPlayingTrack, status = 200) {
 export default async function handler(): Promise<Response> {
   try {
     const accessToken = await getAccessToken();
-    const res = await fetch(NOW_PLAYING_URL, {
+
+    // First: is something playing right now?
+    const playingRes = await fetch(NOW_PLAYING_URL, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    // 204 = nothing playing (also covers private sessions)
-    if (res.status === 204 || res.status >= 400) {
-      return json({ isPlaying: false });
-    }
-
-    const data = (await res.json()) as {
-      is_playing?: boolean;
-      item?: {
-        name?: string;
-        artists?: { name: string }[];
-        album?: {
-          name?: string;
-          images?: { url: string }[];
-        };
-        external_urls?: { spotify?: string };
+    if (playingRes.status === 200) {
+      const data = (await playingRes.json()) as {
+        is_playing?: boolean;
+        item?: SpotifyTrack;
       };
-    };
-
-    if (!data.is_playing || !data.item) {
-      return json({ isPlaying: false });
+      if (data.is_playing && data.item) {
+        return json(formatTrack(data.item, true));
+      }
     }
 
-    return json({
-      isPlaying: true,
-      title: data.item.name,
-      artist: data.item.artists?.map((a) => a.name).join(", "),
-      album: data.item.album?.name,
-      albumImageUrl: data.item.album?.images?.[0]?.url,
-      songUrl: data.item.external_urls?.spotify,
+    // Fallback: most recently played track (acts as the "empty" state so
+    // the widget always has something to show when the user isn't listening).
+    const recentRes = await fetch(RECENTLY_PLAYED_URL, {
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
+
+    if (recentRes.status === 200) {
+      const data = (await recentRes.json()) as {
+        items?: { track: SpotifyTrack }[];
+      };
+      const track = data.items?.[0]?.track;
+      if (track) {
+        return json(formatTrack(track, false));
+      }
+    }
+
+    return json({ isPlaying: false });
   } catch {
     // Never leak the error — the client just hides the widget.
     return json({ isPlaying: false });

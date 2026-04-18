@@ -25,9 +25,12 @@ export function NowPlaying({ variant = "compact" }: { variant?: Variant } = {}) 
     refetchOnWindowFocus: false,
   });
 
-  if (!track?.isPlaying || !track.title) return null;
+  // Show the card whenever we have a track — currently playing OR the
+  // most recent. Only hide if Spotify gave us nothing at all.
+  if (!track?.title) return null;
 
-  const label = `Listening to ${track.title} by ${track.artist} on Spotify`;
+  const kindLabel = track.isPlaying ? "Now playing" : "Last played";
+  const label = `${track.isPlaying ? "Listening" : "Last listened"} to ${track.title} by ${track.artist} on Spotify`;
 
   if (variant === "hero") {
     return (
@@ -54,8 +57,8 @@ export function NowPlaying({ variant = "compact" }: { variant?: Variant } = {}) 
         <span className="flex flex-col min-w-0 text-left gap-1.5 flex-1">
           <span className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-stone-400 dark:text-zinc-500 leading-none">
             <SpotifyIcon className="w-3.5 h-3.5 text-emerald-500" />
-            <span>Now playing</span>
-            <PlayingEqualiser />
+            <span>{kindLabel}</span>
+            {track.isPlaying && <PlayingEqualiser />}
           </span>
           <HoverMarquee className="text-[15px] font-semibold text-stone-900 dark:text-zinc-50 leading-tight group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
             {track.title}
@@ -96,9 +99,9 @@ export function NowPlaying({ variant = "compact" }: { variant?: Variant } = {}) 
       <span className="flex flex-col gap-0.5 min-w-0">
         <span className="flex items-center gap-1.5">
           <span className="font-semibold uppercase tracking-[0.14em] text-[10px]">
-            Now playing
+            {kindLabel}
           </span>
-          <PlayingEqualiser />
+          {track.isPlaying && <PlayingEqualiser />}
         </span>
         <span className="truncate">
           <span className="font-medium text-stone-600 dark:text-zinc-300 group-hover:text-inherit transition-colors">
