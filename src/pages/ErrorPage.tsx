@@ -35,8 +35,11 @@ export function ErrorPage() {
   // sentinel so the next unrelated load starts fresh.
   if (typeof window !== "undefined") sessionStorage.removeItem(RELOAD_KEY);
 
-  let heading = "Something broke";
-  let message = "Hit refresh, or head home and try again.";
+  // Short heading keeps visual weight consistent with the 404 page. Only
+  // override with the actual status code when one is available — otherwise
+  // lead with a friendlier word rather than inventing a "500".
+  let heading = "Oops";
+  let message = "Something broke. Hit refresh, or head home and try again.";
   let detail: string | null = null;
 
   if (isRouteErrorResponse(error)) {
@@ -48,23 +51,39 @@ export function ErrorPage() {
   }
 
   return (
-    <div className="text-center py-20">
-      <h1 className="font-serif italic text-6xl md:text-7xl mb-4">
-        <span className="gradient-text-animated">{heading}</span>
-      </h1>
-      <p className="text-stone-500 dark:text-zinc-400 mb-8">{message}</p>
-      <Link
-        viewTransition
-        to="/"
-        className="inline-block px-6 py-2.5 bg-white dark:bg-zinc-800/50 rounded-xl shadow-sm dark:shadow-none dark:border dark:border-zinc-700/50 text-sm font-medium text-stone-700 dark:text-zinc-300 hover:text-orange-600 dark:hover:text-orange-400 hover:shadow-md dark:hover:border-zinc-600/50 transition-all"
+    <div className="relative py-16 md:py-24">
+      {/* Soft colour wash behind the heading — same gradient vocabulary as
+          the hero and featured cards, cranked up and blurred way out. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 flex items-start justify-center -z-10"
       >
-        Go home
-      </Link>
-      {detail && import.meta.env.DEV && (
-        <pre className="mt-10 mx-auto max-w-2xl text-left text-xs text-stone-400 dark:text-zinc-500 whitespace-pre-wrap break-words bg-stone-100 dark:bg-zinc-800/50 rounded-lg p-4">
-          {detail}
-        </pre>
-      )}
+        <div className="w-[32rem] h-[32rem] rounded-full bg-gradient-to-br from-orange-400 via-rose-400 to-violet-500 opacity-20 blur-[120px]" />
+      </div>
+
+      <div className="max-w-xl mx-auto text-center">
+        <h1 className="font-serif italic leading-none tracking-tight mb-6 text-8xl md:text-[10rem]">
+          <span className="gradient-text-animated">{heading}</span>
+        </h1>
+
+        <p className="text-lg text-stone-600 dark:text-zinc-300">{message}</p>
+
+        <div className="mt-10">
+          <Link
+            viewTransition
+            to="/"
+            className="text-sm font-medium text-stone-400 dark:text-zinc-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+          >
+            &larr; Go home
+          </Link>
+        </div>
+
+        {detail && import.meta.env.DEV && (
+          <pre className="mt-10 mx-auto max-w-2xl text-left text-xs text-stone-400 dark:text-zinc-500 whitespace-pre-wrap break-words bg-stone-100 dark:bg-zinc-800/50 rounded-lg p-4">
+            {detail}
+          </pre>
+        )}
+      </div>
     </div>
   );
 }

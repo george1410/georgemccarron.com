@@ -52,11 +52,19 @@ const router = createBrowserRouter(
             </Suspense>
           }
         />
+        {/* TEMP: visit /crash to exercise the ErrorPage. Delete before ship. */}
+        <Route path="crash" element={<CrashTest />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Route>,
   ),
 );
+
+// TEMP: throws on render so /crash hits the ErrorPage. Delete with the
+// route above once you've finished eyeballing the error page.
+function CrashTest(): never {
+  throw new Error("Testing the error page — this one is intentional.");
+}
 
 const queryClient = new QueryClient();
 
