@@ -105,7 +105,9 @@ export default async function handler(): Promise<Response> {
   const user = process.env.GITHUB_USERNAME;
 
   if (!user) {
-    console.error("[api/github] Missing GITHUB_USERNAME env var");
+    const err = new Error("Missing GITHUB_USERNAME env var");
+    console.error("[api/github]", err);
+    await reportError(err, "api/github");
     return json({ totalContributions: 0, weeks: [] });
   }
 
