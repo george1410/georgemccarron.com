@@ -128,10 +128,10 @@ export function Home() {
         </div>
       </section>
 
-      {/* Experience */}
+      {/* Timeline */}
       <section>
-        <h2 id="experience" className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-zinc-500 mb-8 scroll-mt-24">
-          Experience
+        <h2 id="timeline" className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-zinc-500 mb-8 scroll-mt-24">
+          Timeline
         </h2>
         <Timeline />
       </section>

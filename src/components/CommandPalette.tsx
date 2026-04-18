@@ -73,17 +73,17 @@ export function CommandPalette() {
       action: () => {
         setOpen(false);
         if (location.pathname === "/") {
-          document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
+          document.getElementById("timeline")?.scrollIntoView({ behavior: "smooth" });
         } else {
           navigate("/", { viewTransition: true });
           requestAnimationFrame(() => {
             setTimeout(() => {
-              document.getElementById("experience")?.scrollIntoView({ behavior: "smooth" });
+              document.getElementById("timeline")?.scrollIntoView({ behavior: "smooth" });
             }, 250);
           });
         }
       },
-      section: "Experience",
+      section: "Timeline",
     })),
     {
       label: "Toggle theme",
