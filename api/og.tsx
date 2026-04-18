@@ -1,4 +1,5 @@
 import { ImageResponse } from "@vercel/og";
+import { reportError } from "./_sentry";
 
 export const config = {
   runtime: "edge",
@@ -13,7 +14,7 @@ async function loadGoogleFont(family: string, text: string) {
   return res.arrayBuffer();
 }
 
-export default async function handler(request: Request) {
+async function renderOg(request: Request) {
   const { searchParams } = new URL(request.url);
   const title = (searchParams.get("title") ?? "George McCarron").slice(0, 120);
   const subtitle = (searchParams.get("subtitle") ?? "").slice(0, 200);
@@ -123,4 +124,16 @@ export default async function handler(request: Request) {
       ],
     },
   );
+}
+
+// Thin wrapper around renderOg that reports failures to Sentry before
+// letting Vercel return its generic 500 — without this the only record
+// of an OG failure would be the Vercel function log.
+export default async function handler(request: Request) {
+  try {
+    return await renderOg(request);
+  } catch (err) {
+    await reportError(err, "api/og");
+    throw err;
+  }
 }

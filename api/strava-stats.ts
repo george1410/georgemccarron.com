@@ -12,6 +12,7 @@
 //   STRAVA_CLIENT_SECRET
 //   STRAVA_REFRESH_TOKEN
 
+import { reportError } from "./_sentry";
 import type { StravaStatsResponse } from "../src/lib/strava-types";
 
 export const config = {
@@ -140,6 +141,7 @@ export default async function handler(): Promise<Response> {
     return json({ runs: { count, distance, movingTime, elevationGain } });
   } catch (err) {
     console.error("[api/strava-stats]", err);
+    await reportError(err, "api/strava-stats");
     return json({
       runs: { count: 0, distance: 0, movingTime: 0, elevationGain: 0 },
     });

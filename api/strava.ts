@@ -10,6 +10,7 @@
 //   STRAVA_CLIENT_SECRET
 //   STRAVA_REFRESH_TOKEN
 
+import { reportError } from "./_sentry";
 import { decodePolyline, polylineToSvgPath } from "../src/lib/polyline";
 import type {
   StravaActivitiesResponse,
@@ -204,6 +205,7 @@ export default async function handler(request: Request): Promise<Response> {
     return json({ runs, nextCursor });
   } catch (err) {
     console.error("[api/strava]", err);
+    await reportError(err, "api/strava");
     return json({ runs: [], nextCursor: null });
   }
 }
