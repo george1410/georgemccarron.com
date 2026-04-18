@@ -77,14 +77,63 @@ export function Running() {
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  if (isLoading) return <LoadingSkeleton />;
-  if (isError || runs.length === 0) return <EmptyState />;
-
   const [latest, ...rest] = runs;
+
+  const body = (() => {
+    if (isLoading) return <LoadingSkeleton />;
+    if (isError || runs.length === 0) return <EmptyMessage />;
+    return (
+      <>
+        {/* All-time stats */}
+        {stats && stats.count > 0 && (
+          <section className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <Stat label="Distance" value={formatDistance(stats.distance)} />
+            <Stat label="Runs" value={stats.count.toLocaleString()} />
+            <Stat label="Time" value={formatTotalTime(stats.movingTime)} />
+            <Stat
+              label="Elevation"
+              value={formatElevation(stats.elevationGain)}
+            />
+          </section>
+        )}
+
+        {/* Latest run featured */}
+        {latest && <FeaturedRun run={latest} />}
+
+        {/* Grid of previous runs */}
+        {rest.length > 0 && (
+          <section>
+            <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-zinc-500 mb-8">
+              Previously
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {rest.map((run) => (
+                <RunCard key={run.id} run={run} />
+              ))}
+            </div>
+
+            {/* Pagination sentinel + footer */}
+            <div ref={sentinelRef} aria-hidden="true" />
+            {isFetchingNextPage && (
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <CardSkeleton key={i} />
+                ))}
+              </div>
+            )}
+            {!hasNextPage && (
+              <p className="mt-12 text-center text-xs text-stone-400 dark:text-zinc-500">
+                That's the lot.
+              </p>
+            )}
+          </section>
+        )}
+      </>
+    );
+  })();
 
   return (
     <div className="space-y-16">
-      {/* Header */}
       <section>
         <h1 className="font-serif italic text-5xl md:text-7xl leading-[0.95] tracking-tight">
           <span className="gradient-text-animated">Running</span>
@@ -93,48 +142,7 @@ export function Running() {
           Every squiggle below is a real route, pulled fresh from Strava.
         </p>
       </section>
-
-      {/* All-time stats */}
-      {stats && stats.count > 0 && (
-        <section className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <Stat label="Distance" value={formatDistance(stats.distance)} />
-          <Stat label="Runs" value={stats.count.toLocaleString()} />
-          <Stat label="Time" value={formatTotalTime(stats.movingTime)} />
-          <Stat label="Elevation" value={formatElevation(stats.elevationGain)} />
-        </section>
-      )}
-
-      {/* Latest run featured */}
-      {latest && <FeaturedRun run={latest} />}
-
-      {/* Grid of previous runs */}
-      {rest.length > 0 && (
-        <section>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-zinc-500 mb-8">
-            Previously
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {rest.map((run) => (
-              <RunCard key={run.id} run={run} />
-            ))}
-          </div>
-
-          {/* Pagination sentinel + footer */}
-          <div ref={sentinelRef} aria-hidden="true" />
-          {isFetchingNextPage && (
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <CardSkeleton key={i} />
-              ))}
-            </div>
-          )}
-          {!hasNextPage && (
-            <p className="mt-12 text-center text-xs text-stone-400 dark:text-zinc-500">
-              That's the lot.
-            </p>
-          )}
-        </section>
-      )}
+      {body}
     </div>
   );
 }
@@ -387,11 +395,7 @@ function CardSkeleton() {
 
 function LoadingSkeleton() {
   return (
-    <div className="space-y-16">
-      <section>
-        <div className="h-16 w-72 rounded-lg bg-stone-200 dark:bg-zinc-800 animate-pulse" />
-        <div className="mt-6 h-5 w-full max-w-xl rounded-full bg-stone-200 dark:bg-zinc-800 animate-pulse" />
-      </section>
+    <>
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <div
@@ -410,21 +414,14 @@ function LoadingSkeleton() {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 }
 
-function EmptyState() {
+function EmptyMessage() {
   return (
-    <div className="space-y-16">
-      <section>
-        <h1 className="font-serif italic text-5xl md:text-7xl leading-[0.95] tracking-tight">
-          <span className="gradient-text-animated">Running</span>
-        </h1>
-        <p className="mt-6 text-lg text-stone-500 dark:text-zinc-400 leading-relaxed max-w-xl">
-          Nothing to show right now — check back after the next run.
-        </p>
-      </section>
-    </div>
+    <p className="text-stone-500 dark:text-zinc-400">
+      Nothing to show right now — check back after the next run.
+    </p>
   );
 }
