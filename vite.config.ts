@@ -1,4 +1,4 @@
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import mdx from "@mdx-js/rollup";
 import tailwindcss from "@tailwindcss/vite";
@@ -32,6 +32,86 @@ function replaceMeta(
     out = out.replace(selector, `$1${value}$2`);
   }
   return out;
+}
+
+// Runs api/*.ts (Vercel serverless functions) in the Vite dev server.
+// Fetches /api/<name> → dynamically loads api/<name>.ts, executes its default
+// export as a (Request) => Response handler, and streams the response back.
+// Env vars come from .env.local via Vite's loadEnv.
+function vercelApiDev(): Plugin {
+  return {
+    name: "vercel-api-dev",
+    apply: "serve",
+    async configureServer(server) {
+      // Pull .env / .env.local / .env.development into process.env so
+      // the handlers see the same variables they will on Vercel.
+      const env = loadEnv(server.config.mode, server.config.root, "");
+      for (const [k, v] of Object.entries(env)) {
+        if (!(k in process.env)) process.env[k] = v;
+      }
+
+      server.middlewares.use(async (req, res, next) => {
+        if (!req.url?.startsWith("/api/")) return next();
+        const path = await import("node:path");
+        const fs = await import("node:fs/promises");
+
+        const pathname = req.url.split("?")[0]!;
+        const name = pathname.slice("/api/".length).replace(/\/+$/, "");
+        if (!name) return next();
+
+        // Try .ts then .tsx
+        const candidates = ["ts", "tsx"].map((ext) =>
+          path.resolve(server.config.root, `api/${name}.${ext}`),
+        );
+        let file: string | null = null;
+        for (const c of candidates) {
+          try {
+            await fs.access(c);
+            file = c;
+            break;
+          } catch {
+            // try next
+          }
+        }
+        if (!file) return next();
+
+        try {
+          const mod = await server.ssrLoadModule(file);
+          const handler = mod.default;
+          if (typeof handler !== "function") return next();
+
+          const host = req.headers.host ?? "localhost";
+          const url = new URL(req.url, `http://${host}`);
+
+          // Read request body if one is present (for POST/PUT etc).
+          let body: Buffer | undefined;
+          if (req.method && !["GET", "HEAD"].includes(req.method)) {
+            const chunks: Buffer[] = [];
+            for await (const chunk of req)
+              chunks.push(chunk as unknown as Buffer);
+            if (chunks.length) body = Buffer.concat(chunks);
+          }
+
+          const request = new Request(url.toString(), {
+            method: req.method,
+            headers: req.headers as Record<string, string>,
+            body: body as unknown as ArrayBuffer | undefined,
+          });
+
+          const response: Response = await handler(request);
+          res.statusCode = response.status;
+          response.headers.forEach((value, key) => res.setHeader(key, value));
+          const buf = Buffer.from(await response.arrayBuffer());
+          res.end(buf);
+        } catch (err) {
+          console.error(`[vercel-api-dev] ${file}:`, err);
+          res.statusCode = 500;
+          res.setHeader("Content-Type", "text/plain");
+          res.end(err instanceof Error ? err.stack ?? err.message : String(err));
+        }
+      });
+    },
+  };
 }
 
 function generateOgPages(): Plugin {
@@ -133,6 +213,7 @@ export default defineConfig({
     }) },
     react(),
     tailwindcss(),
+    vercelApiDev(),
     generateOgPages(),
   ],
 });

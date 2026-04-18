@@ -3,6 +3,7 @@ import { useTitle } from "../hooks/useTitle";
 import { SocialLinks } from "../components/SocialLinks";
 import { PostCard, FeaturedPostCard } from "../components/PostCard";
 import { Timeline } from "../components/Timeline";
+import { NowPlaying } from "../components/NowPlaying";
 import { YouTubeEmbed } from "../components/YouTubeEmbed";
 import { posts } from "../data/posts";
 import { talks } from "../data/talks";
@@ -48,13 +49,16 @@ export function Home() {
             <SocialLinks />
           </div>
         </div>
-        <div className="order-1 md:order-2 flex-shrink-0 group relative">
-          <div className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-orange-400 via-rose-400 to-violet-500 opacity-0 group-hover:opacity-70 blur-2xl transition-all duration-700" />
-          <img
-            src="/me2.jpg"
-            alt="George McCarron"
-            className="relative w-36 h-36 md:w-48 md:h-48 rounded-3xl object-cover shadow-xl ring-4 ring-white dark:ring-zinc-800 rotate-3 group-hover:-rotate-2 group-hover:scale-105 transition-all duration-500"
-          />
+        <div className="order-1 md:order-2 flex-shrink-0 flex flex-col items-center md:items-end gap-10">
+          <div className="group relative">
+            <div className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-orange-400 via-rose-400 to-violet-500 opacity-0 group-hover:opacity-70 blur-2xl transition-all duration-700" />
+            <img
+              src="/me2.jpg"
+              alt="George McCarron"
+              className="relative w-36 h-36 md:w-48 md:h-48 rounded-3xl object-cover shadow-xl ring-4 ring-white dark:ring-zinc-800 rotate-3 group-hover:-rotate-2 group-hover:scale-105 transition-all duration-500"
+            />
+          </div>
+          <NowPlaying variant="hero" />
         </div>
       </section>
 
