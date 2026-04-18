@@ -33,8 +33,6 @@ const MODEL = "claude-haiku-4-5";
 
 type Commit = { hash: string; date: string; subject: string };
 
-type Cache = { entries: ChangelogEntry[]; skipped: string[] };
-
 // Dedupe key for a commit. Author-date + subject are preserved across
 // `git commit --amend --no-edit`, so amending (as the hook does) doesn't
 // cause the amended commit to look "new" to the script.
@@ -42,21 +40,26 @@ function commitKey(input: { date: string; subject: string }): string {
   return `${input.date}::${input.subject}`;
 }
 
-function loadCache(): Cache {
-  if (!existsSync(CACHE_PATH)) return { entries: [], skipped: [] };
+function loadCache(): ChangelogEntry[] {
+  if (!existsSync(CACHE_PATH)) return [];
   const raw = JSON.parse(readFileSync(CACHE_PATH, "utf-8"));
-  // Legacy array-only format — migrate into the new shape on read.
-  if (Array.isArray(raw)) return { entries: raw as ChangelogEntry[], skipped: [] };
-  return {
-    entries: (raw.entries ?? []) as ChangelogEntry[],
-    skipped: (raw.skipped ?? []) as string[],
-  };
+  if (Array.isArray(raw)) return raw as ChangelogEntry[];
+  // Legacy { entries, skipped } shape — fold skipped hashes into flat
+  // entries so the rest of the script only deals with one list.
+  const entries = ((raw.entries ?? []) as ChangelogEntry[]).slice();
+  for (const s of (raw.skipped ?? []) as unknown[]) {
+    if (typeof s !== "string") continue;
+    // Legacy hashes get no date/subject — they're orphaned but harmless;
+    // they survive in the file but won't dedupe against current commits.
+    entries.push({ date: "", subject: s, skipped: true });
+  }
+  return entries;
 }
 
-function saveCache(cache: Cache) {
+function saveCache(entries: ChangelogEntry[]) {
   const dir = dirname(CACHE_PATH);
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-  writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2) + "\n", "utf-8");
+  writeFileSync(CACHE_PATH, JSON.stringify(entries, null, 2) + "\n", "utf-8");
 }
 
 function recentCommits(limit: number | null): Commit[] {
@@ -178,30 +181,32 @@ async function main() {
 
   const client = new Anthropic({ apiKey });
   const cache = loadCache();
-  // Each entry knows its own dedupe key (date + subject). Legacy entries
-  // without `subject` still dedupe via date-only as a fallback (still
-  // unique enough in practice for one-off commits on the same second).
-  const processedKeys = new Set<string>([
-    ...cache.entries.map((e) =>
-      e.subject ? commitKey({ date: e.date, subject: e.subject }) : e.date,
-    ),
-    ...cache.skipped,
-  ]);
-  const totalCached = cache.entries.length + cache.skipped.length;
+
+  // Every entry — real or skipped — contributes its dedupe key to the
+  // processed set. Legacy entries without `subject` fall back to
+  // date-only, which is coarser but enough for pre-migration rows.
+  const processedKeys = new Set<string>();
+  for (const e of cache) {
+    if (e.subject && e.date) {
+      processedKeys.add(commitKey({ date: e.date, subject: e.subject }));
+    }
+    if (e.subject) processedKeys.add(e.subject);
+    if (e.date) processedKeys.add(e.date);
+  }
+
   // Cache empty → first run → process everything. Cache populated →
   // only look at the recent window, since anything older is already in.
   // git log returns newest-first; reverse so we summarise in chronological
   // order. If a long run is interrupted, the cache retains full history
   // up to the point of failure rather than just the latest few commits.
   const commits = recentCommits(
-    totalCached === 0 ? null : MAX_COMMITS,
+    cache.length === 0 ? null : MAX_COMMITS,
   ).reverse();
 
   const newEntries: ChangelogEntry[] = [];
-  const newSkipped: string[] = [];
   for (const c of commits) {
     const key = commitKey({ date: c.date, subject: c.subject });
-    if (processedKeys.has(key) || processedKeys.has(c.date)) continue;
+    if (processedKeys.has(key)) continue;
 
     process.stdout.write(
       `[changelog] summarising ${c.hash.slice(0, 7)} "${c.subject}" … `,
@@ -209,34 +214,32 @@ async function main() {
     const result = await summarise(client, c);
     if (!result) {
       console.log("skip");
-      newSkipped.push(key);
+      newEntries.push({ date: c.date, subject: c.subject, skipped: true });
       continue;
     }
 
     console.log(`"${result.title}"`);
     newEntries.push({
       date: c.date,
+      subject: c.subject,
       title: result.title,
       summary: result.summary,
-      subject: c.subject,
     });
   }
 
-  if (newEntries.length === 0 && newSkipped.length === 0) {
+  if (newEntries.length === 0) {
     console.log("[changelog] no new entries.");
     return;
   }
 
   // Full ISO timestamps compare lexicographically == chronologically.
-  const merged: ChangelogEntry[] = [...newEntries, ...cache.entries].sort(
-    (a, b) => b.date.localeCompare(a.date),
+  const merged: ChangelogEntry[] = [...newEntries, ...cache].sort((a, b) =>
+    b.date.localeCompare(a.date),
   );
-  saveCache({
-    entries: merged,
-    skipped: [...cache.skipped, ...newSkipped],
-  });
+  saveCache(merged);
+  const skipCount = newEntries.filter((e) => e.skipped).length;
   console.log(
-    `[changelog] added ${newEntries.length} entrie(s), ${newSkipped.length} skip(s).`,
+    `[changelog] added ${newEntries.length - skipCount} entrie(s), ${skipCount} skip(s).`,
   );
 }
 
