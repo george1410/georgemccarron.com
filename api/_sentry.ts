@@ -14,6 +14,11 @@ Sentry.init({
   enabled: process.env.VERCEL_ENV === "production",
   sendDefaultPii: true,
   tracesSampleRate: 0.2,
+  integrations: [
+    // Any `console.error(...)` call becomes a Sentry event — covers
+    // log-and-return paths that never throw into our catch blocks.
+    Sentry.captureConsoleIntegration({ levels: ["error"] }),
+  ],
 });
 
 export async function reportError(err: unknown, context: string) {

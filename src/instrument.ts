@@ -31,6 +31,10 @@ Sentry.init({
       maskAllText: true,
       blockAllMedia: true,
     }),
+    // Turn any `console.error(...)` call into a Sentry event so code paths
+    // that log-and-return (rather than throw) still surface. Scoped to
+    // error-level only to avoid sending debug logs.
+    Sentry.captureConsoleIntegration({ levels: ["error"] }),
   ],
   // Tracing — sample 20% of transactions in prod (generous for a personal
   // site; tune down if volume ever grows).
