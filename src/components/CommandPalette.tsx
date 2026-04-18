@@ -6,6 +6,7 @@ import { timeline } from "../data/timeline";
 import { timelineEntryId } from "./Timeline";
 import { useNowPlaying } from "../hooks/useNowPlaying";
 import { useGithubContributions } from "../hooks/useGithubContributions";
+import { showToast } from "./Toast";
 
 interface CommandItem {
   label: string;
@@ -159,6 +160,7 @@ export function CommandPalette() {
       action: () => {
         navigator.clipboard.writeText("hello@georgemccarron.com");
         setOpen(false);
+        showToast("Email copied");
       },
       section: "Actions",
       icon: <AtIcon />,

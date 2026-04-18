@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Nav } from "./Nav";
 import { Footer } from "./Footer";
 import { CommandPalette } from "./CommandPalette";
+import { ToastHost } from "./Toast";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -21,6 +22,7 @@ export function Layout() {
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
       <CommandPalette />
+      <ToastHost />
       <Nav />
       <main
         className={
