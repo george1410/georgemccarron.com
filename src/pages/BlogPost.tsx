@@ -174,16 +174,22 @@ export function BlogPost() {
   return (
     <article>
       <ScrollProgress />
-      <Link
-        viewTransition
-        to="/blog"
-        className="text-sm text-stone-400 dark:text-zinc-500 hover:text-orange-500 dark:hover:text-orange-400 transition-colors font-medium inline-block mb-10"
-      >
-        &larr; Back to blog
-      </Link>
-
       <header className="mb-10">
-        <div className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-zinc-500 mb-3">
+        <div className="flex flex-wrap items-center text-xs font-semibold uppercase tracking-[0.2em] text-stone-400 dark:text-zinc-500 mb-3">
+          <Link
+            viewTransition
+            to="/blog"
+            className="group inline-flex items-center gap-1 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
+          >
+            <span
+              aria-hidden="true"
+              className="group-hover:-translate-x-0.5 transition-transform inline-block"
+            >
+              ←
+            </span>
+            <span>Blog</span>
+          </Link>
+          <span className="mx-2">&middot;</span>
           {formatDate(post.date)}
           {readingTime && (
             <>
