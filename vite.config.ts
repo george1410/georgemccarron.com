@@ -217,7 +217,7 @@ function rssFeed(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const pathname = req.url?.split("?")[0];
-        if (pathname === "/rss.xml" || pathname === "/feed.xml") {
+        if (pathname === "/rss.xml") {
           res.setHeader("Content-Type", "application/rss+xml; charset=utf-8");
           res.end(generateRssXml());
           return;
