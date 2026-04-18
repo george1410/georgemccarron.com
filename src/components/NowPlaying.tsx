@@ -25,9 +25,15 @@ export function NowPlaying({ variant = "compact" }: { variant?: Variant } = {}) 
     refetchOnWindowFocus: false,
   });
 
+  // Initial fetch hasn't returned yet — show a skeleton so the layout
+  // doesn't flash in once data arrives.
+  if (track === undefined) {
+    return variant === "hero" ? <HeroSkeleton /> : <CompactSkeleton />;
+  }
+
   // Show the card whenever we have a track — currently playing OR the
   // most recent. Only hide if Spotify gave us nothing at all.
-  if (!track?.title) return null;
+  if (!track.title) return null;
 
   const kindLabel = track.isPlaying ? "Now playing" : "Last played";
   const label = `${track.isPlaying ? "Listening" : "Last listened"} to ${track.title} by ${track.artist} on Spotify`;
@@ -171,6 +177,40 @@ function HoverMarquee({
         {children}
       </span>
     </span>
+  );
+}
+
+// Skeleton shown while the initial /api/spotify fetch is in flight.
+// Mirrors the hero card's shape so the transition feels like content
+// filling in rather than the widget popping into existence.
+function HeroSkeleton() {
+  return (
+    <div
+      aria-hidden="true"
+      className="relative flex items-center gap-4 px-5 py-4 rounded-2xl bg-white dark:bg-zinc-800/80 border border-stone-200 dark:border-zinc-700/60 shadow-sm -rotate-1 w-[26rem] max-w-[calc(100vw-3rem)] overflow-hidden"
+    >
+      <div className="w-16 h-16 rounded-xl flex-shrink-0 bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+      <div className="flex flex-col gap-2 flex-1 min-w-0">
+        <div className="h-2.5 w-24 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+        <div className="h-3.5 w-3/4 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+        <div className="h-3 w-1/2 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+      </div>
+    </div>
+  );
+}
+
+function CompactSkeleton() {
+  return (
+    <div
+      aria-hidden="true"
+      className="inline-flex items-center gap-2"
+    >
+      <div className="w-3.5 h-3.5 rounded-full bg-stone-200 dark:bg-zinc-700 flex-shrink-0 animate-pulse" />
+      <div className="flex flex-col gap-1">
+        <div className="h-2 w-14 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+        <div className="h-2.5 w-32 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+      </div>
+    </div>
   );
 }
 
