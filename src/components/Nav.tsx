@@ -61,6 +61,9 @@ export function Nav() {
           <NavLink to="/map" viewTransition className={navLinkClass}>
             Map
           </NavLink>
+          <NavLink to="/running" viewTransition className={navLinkClass}>
+            Running
+          </NavLink>
           <CmdKButton />
           <ThemeToggle />
         </div>

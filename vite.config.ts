@@ -38,7 +38,34 @@ function replaceMeta(
 // Fetches /api/<name> → dynamically loads api/<name>.ts, executes its default
 // export as a (Request) => Response handler, and streams the response back.
 // Env vars come from .env.local via Vite's loadEnv.
+//
+// Successful GET responses are held in an in-memory cache that honours the
+// response's own Cache-Control header (s-maxage preferred, falling back to
+// max-age) — the same contract Vercel's edge applies in production.
+// Append `?no-cache` to any URL to force a miss.
+function parseCacheTtlMs(cacheControl: string | null): number {
+  if (!cacheControl) return 0;
+  const parts = cacheControl.split(",").map((p) => p.trim().toLowerCase());
+  if (parts.includes("no-store") || parts.includes("private")) return 0;
+  const pick = (key: string) => {
+    const hit = parts.find((p) => p.startsWith(`${key}=`));
+    if (!hit) return undefined;
+    const n = Number(hit.slice(key.length + 1));
+    return Number.isFinite(n) && n > 0 ? n : undefined;
+  };
+  const seconds = pick("s-maxage") ?? pick("max-age") ?? 0;
+  return seconds * 1000;
+}
+
 function vercelApiDev(): Plugin {
+  type CacheEntry = {
+    expiresAt: number;
+    status: number;
+    headers: [string, string][];
+    body: Buffer;
+  };
+  const cache = new Map<string, CacheEntry>();
+
   return {
     name: "vercel-api-dev",
     apply: "serve",
@@ -75,6 +102,21 @@ function vercelApiDev(): Plugin {
         }
         if (!file) return next();
 
+        const isGet = !req.method || req.method === "GET";
+        const bypass = req.url.includes("no-cache");
+        const cacheKey = req.url;
+
+        if (isGet && !bypass) {
+          const hit = cache.get(cacheKey);
+          if (hit && hit.expiresAt > Date.now()) {
+            res.statusCode = hit.status;
+            for (const [k, v] of hit.headers) res.setHeader(k, v);
+            res.setHeader("X-Dev-Cache", "HIT");
+            res.end(hit.body);
+            return;
+          }
+        }
+
         try {
           const mod = await server.ssrLoadModule(file);
           const handler = mod.default;
@@ -99,9 +141,32 @@ function vercelApiDev(): Plugin {
           });
 
           const response: Response = await handler(request);
-          res.statusCode = response.status;
-          response.headers.forEach((value, key) => res.setHeader(key, value));
           const buf = Buffer.from(await response.arrayBuffer());
+          const headerPairs: [string, string][] = [];
+          response.headers.forEach((value, key) => headerPairs.push([key, value]));
+
+          // Only cache successful GETs with a positive Cache-Control TTL —
+          // this mirrors Vercel's edge, which also only caches responses
+          // that explicitly opt in.
+          const ttlMs = parseCacheTtlMs(response.headers.get("Cache-Control"));
+          if (
+            isGet &&
+            !bypass &&
+            ttlMs > 0 &&
+            response.status >= 200 &&
+            response.status < 300
+          ) {
+            cache.set(cacheKey, {
+              expiresAt: Date.now() + ttlMs,
+              status: response.status,
+              headers: headerPairs,
+              body: buf,
+            });
+          }
+
+          res.statusCode = response.status;
+          for (const [k, v] of headerPairs) res.setHeader(k, v);
+          res.setHeader("X-Dev-Cache", "MISS");
           res.end(buf);
         } catch (err) {
           console.error(`[vercel-api-dev] ${file}:`, err);
