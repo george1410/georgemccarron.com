@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { useTitle } from "../hooks/useTitle";
-import { decodePolyline, polylineToSvgPath } from "../lib/polyline";
 import type {
   StravaActivitiesResponse,
   StravaRun,
@@ -170,7 +169,7 @@ function FeaturedRun({ run }: { run: StravaRun }) {
       <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-center">
         <div className="w-full md:w-72 aspect-square flex-shrink-0 relative">
           <RunPolyline
-            polyline={run.polyline}
+            run={run}
             className="w-full h-full text-orange-500 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors"
             strokeWidth={1.4}
             endpoints
@@ -225,7 +224,7 @@ function RunCard({ run }: { run: StravaRun }) {
     >
       <div className="aspect-square mb-4">
         <RunPolyline
-          polyline={run.polyline}
+          run={run}
           className="w-full h-full text-orange-500 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors"
           strokeWidth={1.6}
           endpoints
@@ -252,28 +251,31 @@ function RunCard({ run }: { run: StravaRun }) {
   );
 }
 
-// Draws the polyline inside a 100×100 viewBox via currentColor stroke.
+// Draws a pre-projected SVG path (computed server-side from the polyline)
+// via currentColor stroke.
 function RunPolyline({
-  polyline,
+  run,
   className,
   strokeWidth = 2,
   endpoints = false,
 }: {
-  polyline: string;
+  run: StravaRun;
   className?: string;
   strokeWidth?: number;
   endpoints?: boolean;
 }) {
-  const SIZE = 100;
-  const points = decodePolyline(polyline);
-  if (points.length < 2) return null;
-  const d = polylineToSvgPath(points, SIZE, SIZE, 6);
+  const { svgPath: d, svgSize } = run;
+  if (!d) return null;
 
   const firstMatch = d.match(/^M([\d.]+),([\d.]+)/);
   const lastMatch = d.match(/L([\d.]+),([\d.]+)$/);
 
   return (
-    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className={className} aria-hidden="true">
+    <svg
+      viewBox={`0 0 ${svgSize} ${svgSize}`}
+      className={className}
+      aria-hidden="true"
+    >
       <path
         d={d}
         fill="none"

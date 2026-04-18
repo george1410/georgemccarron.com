@@ -10,10 +10,16 @@
 //   STRAVA_CLIENT_SECRET
 //   STRAVA_REFRESH_TOKEN
 
+import { decodePolyline, polylineToSvgPath } from "../src/lib/polyline";
 import type {
   StravaActivitiesResponse,
   StravaRun,
 } from "../src/lib/strava-types";
+
+// Fixed SVG viewBox size — every run is projected into the same 100×100
+// box so the client can render the path as-is without ever seeing lat/lng.
+const SVG_SIZE = 100;
+const SVG_PADDING = 6;
 
 export const config = {
   runtime: "edge",
@@ -98,7 +104,10 @@ function isShareableRun(a: StravaActivity): boolean {
   return true;
 }
 
-function toStravaRun(a: StravaActivity): StravaRun {
+function toStravaRun(a: StravaActivity): StravaRun | null {
+  const points = decodePolyline(a.map!.summary_polyline!);
+  if (points.length < 2) return null;
+  const svgPath = polylineToSvgPath(points, SVG_SIZE, SVG_SIZE, SVG_PADDING);
   return {
     id: a.id,
     name: a.name,
@@ -107,7 +116,8 @@ function toStravaRun(a: StravaActivity): StravaRun {
     elapsedTime: a.elapsed_time,
     totalElevationGain: a.total_elevation_gain,
     startDate: a.start_date,
-    polyline: a.map!.summary_polyline!,
+    svgPath,
+    svgSize: SVG_SIZE,
     activityUrl: `https://www.strava.com/activities/${a.id}`,
     averageSpeed: a.average_speed,
     locationCity: a.location_city ?? undefined,
@@ -169,7 +179,9 @@ export default async function handler(request: Request): Promise<Response> {
       for (let i = 0; i < activities.length; i++) {
         const a = activities[i]!;
         if (isShareableRun(a)) {
-          runs.push(toStravaRun(a));
+          const run = toStravaRun(a);
+          if (!run) continue;
+          runs.push(run);
           if (runs.length >= count) {
             stoppedAt = i;
             break;

@@ -9,7 +9,11 @@ export type StravaRun = {
   elapsedTime: number; // seconds
   totalElevationGain: number; // metres
   startDate: string; // ISO
-  polyline: string; // Google encoded polyline (summary)
+  // Pre-projected SVG path `d` string — already normalised to a fixed
+  // 100×100 viewBox server-side so raw GPS coordinates never reach the
+  // client.
+  svgPath: string;
+  svgSize: number; // viewBox dimension (square)
   activityUrl: string;
   averageSpeed?: number; // m/s
   locationCity?: string;
