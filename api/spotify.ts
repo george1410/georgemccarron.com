@@ -7,7 +7,7 @@
 //
 // See scripts/spotify-auth.ts for the one-time refresh-token bootstrap.
 
-import { reportError } from "./_sentry";
+import "./_sentry";
 import type { NowPlayingTrack } from "../src/lib/spotify-types";
 
 export const config = {
@@ -117,9 +117,9 @@ export default async function handler(): Promise<Response> {
 
     return json({ isPlaying: false });
   } catch (err) {
-    // Never leak the error to the client — just hide the widget — but
-    // report it so we can see when Spotify/auth starts failing.
-    await reportError(err, "api/spotify");
+    // Never leak the error to the client — just hide the widget. Sentry
+    // still sees it via the console-capture integration.
+    console.error("[api/spotify]", err);
     return json({ isPlaying: false });
   }
 }

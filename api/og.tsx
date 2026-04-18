@@ -1,5 +1,5 @@
 import { ImageResponse } from "@vercel/og";
-import { reportError } from "./_sentry";
+import "./_sentry";
 
 export const config = {
   runtime: "edge",
@@ -126,14 +126,14 @@ async function renderOg(request: Request) {
   );
 }
 
-// Thin wrapper around renderOg that reports failures to Sentry before
-// letting Vercel return its generic 500 — without this the only record
-// of an OG failure would be the Vercel function log.
+// Thin wrapper around renderOg so failures surface in Sentry (via the
+// console-capture integration) rather than being invisible inside
+// Vercel's generic 500.
 export default async function handler(request: Request) {
   try {
     return await renderOg(request);
   } catch (err) {
-    await reportError(err, "api/og");
+    console.error("[api/og]", err);
     throw err;
   }
 }

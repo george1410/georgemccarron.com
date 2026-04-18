@@ -11,7 +11,7 @@
 // Env vars required (set on Vercel):
 //   GITHUB_USERNAME  — the login whose calendar to fetch (e.g. "george1410")
 
-import { reportError } from "./_sentry";
+import "./_sentry";
 import type {
   ContribDay,
   ContribLevel,
@@ -130,7 +130,6 @@ export default async function handler(): Promise<Response> {
     return json(parseHtml(html));
   } catch (err) {
     console.error("[api/github]", err);
-    await reportError(err, "api/github");
     return json({ totalContributions: 0, weeks: [] });
   }
 }
