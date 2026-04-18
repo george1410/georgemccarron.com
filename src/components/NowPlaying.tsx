@@ -1,47 +1,29 @@
 import {
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
   type ReactNode,
 } from "react";
-
-type Track = {
-  isPlaying: boolean;
-  title?: string;
-  artist?: string;
-  album?: string;
-  albumImageUrl?: string;
-  songUrl?: string;
-};
+import { useQuery } from "@tanstack/react-query";
+import type { NowPlayingTrack } from "../lib/spotify-types";
 
 type Variant = "hero" | "compact";
 
 export function NowPlaying({ variant = "compact" }: { variant?: Variant } = {}) {
-  const [track, setTrack] = useState<Track | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const load = async () => {
-      try {
-        const res = await fetch("/api/spotify");
-        if (!res.ok) return;
-        const data = (await res.json()) as Track;
-        if (!cancelled) setTrack(data);
-      } catch {
-        // silently fail — widget just stays hidden
-      }
-    };
-
-    load();
-    const id = setInterval(load, 30_000);
-    return () => {
-      cancelled = true;
-      clearInterval(id);
-    };
-  }, []);
+  // react-query dedupes and polls for every instance sharing this key, so
+  // the hero card and footer row stay in lockstep with one fetch loop.
+  const { data: track } = useQuery<NowPlayingTrack>({
+    queryKey: ["nowPlaying"],
+    queryFn: async () => {
+      const res = await fetch("/api/spotify");
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+    refetchInterval: 30_000,
+    staleTime: 25_000,
+    refetchOnWindowFocus: false,
+  });
 
   if (!track?.isPlaying || !track.title) return null;
 

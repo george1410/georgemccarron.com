@@ -7,6 +7,8 @@
 //
 // See scripts/spotify-auth.ts for the one-time refresh-token bootstrap.
 
+import type { NowPlayingTrack } from "../src/lib/spotify-types";
+
 export const config = {
   runtime: "edge",
 };
@@ -14,15 +16,6 @@ export const config = {
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const NOW_PLAYING_URL =
   "https://api.spotify.com/v1/me/player/currently-playing";
-
-type NowPlaying = {
-  isPlaying: boolean;
-  title?: string;
-  artist?: string;
-  album?: string;
-  albumImageUrl?: string;
-  songUrl?: string;
-};
 
 async function getAccessToken(): Promise<string> {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
@@ -51,7 +44,7 @@ async function getAccessToken(): Promise<string> {
   return json.access_token;
 }
 
-function json(body: NowPlaying, status = 200) {
+function json(body: NowPlayingTrack, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
