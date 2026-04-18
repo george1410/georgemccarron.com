@@ -19,8 +19,9 @@ export function Speaking() {
   useTitle("Speaking");
   return (
     <div>
-      <h1 className="font-serif italic text-5xl md:text-6xl tracking-tight text-stone-900 dark:text-zinc-50 mb-10">
-        Speaking<span className="text-orange-400">.</span>
+      <h1 className="font-serif italic text-5xl md:text-6xl tracking-tight mb-10">
+        <span className="gradient-text-animated">Speaking</span>
+        <span className="text-orange-400">.</span>
       </h1>
 
       <div className="space-y-6">
