@@ -6,6 +6,7 @@ import { talks } from "../data/talks";
 import { timeline } from "../data/timeline";
 import { timelineEntryId } from "./Timeline";
 import type { NowPlayingTrack } from "../lib/spotify-types";
+import type { ContribResponse } from "../lib/github-types";
 
 interface CommandItem {
   label: string;
@@ -50,6 +51,18 @@ export function CommandPalette() {
     refetchOnWindowFocus: false,
   });
 
+  // Shares the cache with <Contributions /> — same queryKey.
+  const { data: contribs } = useQuery<ContribResponse>({
+    queryKey: ["githubContributions"],
+    queryFn: async () => {
+      const res = await fetch("/api/github");
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+    staleTime: 60 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+
   const toggle = useCallback(() => {
     setOpen((o) => {
       if (!o) {
@@ -83,8 +96,22 @@ export function CommandPalette() {
         ]
       : [];
 
+  const contribItems: CommandItem[] =
+    contribs && contribs.totalContributions > 0
+      ? [
+          {
+            label: `${contribs.totalContributions.toLocaleString()} contributions`,
+            sublabel: "in the last year on GitHub",
+            action: () => ext("https://github.com/george1410"),
+            section: "Code",
+            icon: <GithubIcon />,
+          },
+        ]
+      : [];
+
   const allItems: CommandItem[] = [
     ...nowPlayingItems,
+    ...contribItems,
     { label: "Home", action: () => go("/"), section: "Pages", icon: <HomeIcon /> },
     { label: "Blog", action: () => go("/blog"), section: "Pages", icon: <PencilIcon /> },
     { label: "Speaking", action: () => go("/speaking"), section: "Pages", icon: <MicIcon /> },
