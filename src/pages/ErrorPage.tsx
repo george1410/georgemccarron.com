@@ -1,9 +1,39 @@
 import { Link, isRouteErrorResponse, useRouteError } from "react-router";
 import { useTitle } from "../hooks/useTitle";
 
+// Stale-chunk detection — fires when a user with an old index.html in a
+// cached tab tries to lazy-load a page whose chunk hash no longer exists.
+// Vite's thrown message is very consistent across browsers.
+function isChunkLoadError(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  return (
+    /Failed to fetch dynamically imported module/i.test(err.message) ||
+    /Importing a module script failed/i.test(err.message) ||
+    /error loading dynamically imported module/i.test(err.message)
+  );
+}
+
+// Guards against infinite reload loops when a chunk is genuinely broken
+// (not just stale). First failure triggers one reload; if it fails again
+// within the session, we fall through to the real ErrorPage.
+const RELOAD_KEY = "__chunk_reload_attempted";
+
 export function ErrorPage() {
   useTitle("Something broke");
   const error = useRouteError();
+
+  if (
+    typeof window !== "undefined" &&
+    isChunkLoadError(error) &&
+    !sessionStorage.getItem(RELOAD_KEY)
+  ) {
+    sessionStorage.setItem(RELOAD_KEY, "1");
+    window.location.reload();
+    return null;
+  }
+  // If we made it past the reload (or this isn't a chunk error), clear the
+  // sentinel so the next unrelated load starts fresh.
+  if (typeof window !== "undefined") sessionStorage.removeItem(RELOAD_KEY);
 
   let heading = "Something broke";
   let message = "Hit refresh, or head home and try again.";
