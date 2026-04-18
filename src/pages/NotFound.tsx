@@ -8,7 +8,6 @@ export function NotFound() {
     <div className="text-center py-20">
       <h1 className="font-serif italic text-6xl md:text-7xl mb-4">
         <span className="gradient-text-animated">404</span>
-        <span className="text-orange-400">.</span>
       </h1>
       <p className="text-stone-500 dark:text-zinc-400 mb-8">
         This page doesn't exist.

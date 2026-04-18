@@ -8,7 +8,6 @@ export function Blog() {
     <div>
       <h1 className="font-serif italic text-5xl md:text-6xl tracking-tight mb-10">
         <span className="gradient-text-animated">Blog</span>
-        <span className="text-orange-400">.</span>
       </h1>
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
         {posts.map((post) => (

@@ -31,7 +31,6 @@ export function Home() {
             <span className="gradient-text-animated">George</span>
             <br />
             <span className="gradient-text-animated">McCarron</span>
-            <span className="text-orange-400">.</span>
           </h1>
           <p className="mt-6 text-lg text-stone-500 dark:text-zinc-400 leading-relaxed max-w-md">
             Software engineer based in London, UK. Building the single place you

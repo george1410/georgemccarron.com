@@ -21,7 +21,7 @@ export function TalkPage() {
     return (
       <div className="text-center py-20">
         <h1 className="font-serif italic text-4xl text-stone-900 dark:text-zinc-50 mb-4">
-          Not found<span className="text-orange-400">.</span>
+          Not found
         </h1>
         <Link
           viewTransition
@@ -47,7 +47,6 @@ export function TalkPage() {
       <header className="mb-8">
         <h1 className="font-serif italic text-3xl md:text-4xl tracking-tight text-stone-900 dark:text-zinc-50 leading-tight">
           {talk.title}
-          <span className="text-orange-400">.</span>
         </h1>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3">
           <a

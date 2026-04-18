@@ -570,7 +570,6 @@ export function WorldMap() {
         <div className="absolute top-6 left-6 sm:top-10 sm:left-12 pointer-events-none">
           <h1 className="font-serif italic text-4xl sm:text-6xl leading-none tracking-tight text-stone-900 dark:text-zinc-50">
             <span className="gradient-text-animated">Travel</span>
-            <span className="text-orange-400">.</span>
           </h1>
           <p className="mt-3 text-sm text-stone-500 dark:text-zinc-400 max-w-xs">
             Where I've been, where I'm going.

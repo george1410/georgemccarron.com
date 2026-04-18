@@ -21,7 +21,6 @@ export function Speaking() {
     <div>
       <h1 className="font-serif italic text-5xl md:text-6xl tracking-tight mb-10">
         <span className="gradient-text-animated">Speaking</span>
-        <span className="text-orange-400">.</span>
       </h1>
 
       <div className="space-y-6">

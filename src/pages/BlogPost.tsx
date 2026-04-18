@@ -83,7 +83,7 @@ export function BlogPost() {
     return (
       <div className="text-center py-20">
         <h1 className="font-serif italic text-4xl text-stone-900 dark:text-zinc-50 mb-4">
-          Not found<span className="text-orange-400">.</span>
+          Not found
         </h1>
         <Link
           viewTransition
@@ -119,7 +119,6 @@ export function BlogPost() {
         </div>
         <h1 className="font-serif italic text-4xl md:text-5xl tracking-tight text-stone-900 dark:text-zinc-50 leading-tight">
           {post.title}
-          <span className="text-orange-400">.</span>
         </h1>
         <p className="text-lg text-stone-500 dark:text-zinc-400 mt-3">
           {post.subtitle}
