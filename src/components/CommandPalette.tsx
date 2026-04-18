@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef, useCallback, type ReactNode } from "react";
 import { useNavigate, useLocation } from "react-router";
-import { useQuery } from "@tanstack/react-query";
 import { posts } from "../data/posts";
 import { talks } from "../data/talks";
 import { timeline } from "../data/timeline";
 import { timelineEntryId } from "./Timeline";
-import type { NowPlayingTrack } from "../lib/spotify-types";
-import type { ContribResponse } from "../lib/github-types";
+import { useNowPlaying } from "../hooks/useNowPlaying";
+import { useGithubContributions } from "../hooks/useGithubContributions";
 
 interface CommandItem {
   label: string;
@@ -38,30 +37,9 @@ export function CommandPalette() {
     window.open(url, "_blank", "noopener,noreferrer");
   }, []);
 
-  // Reuses the cached fetch from <NowPlaying /> — same queryKey.
-  const { data: track } = useQuery<NowPlayingTrack>({
-    queryKey: ["nowPlaying"],
-    queryFn: async () => {
-      const res = await fetch("/api/spotify");
-      if (!res.ok) throw new Error("Failed");
-      return res.json();
-    },
-    refetchInterval: 30_000,
-    staleTime: 25_000,
-    refetchOnWindowFocus: false,
-  });
-
-  // Shares the cache with <Contributions /> — same queryKey.
-  const { data: contribs } = useQuery<ContribResponse>({
-    queryKey: ["githubContributions"],
-    queryFn: async () => {
-      const res = await fetch("/api/github");
-      if (!res.ok) throw new Error("Failed");
-      return res.json();
-    },
-    staleTime: 60 * 60_000,
-    refetchOnWindowFocus: false,
-  });
+  // Reuses the caches from <NowPlaying /> and <Contributions /> — same hooks.
+  const { data: track } = useNowPlaying();
+  const { data: contribs } = useGithubContributions();
 
   const toggle = useCallback(() => {
     setOpen((o) => {

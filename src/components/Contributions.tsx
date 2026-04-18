@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { createPortal } from "react-dom";
-import { useQuery } from "@tanstack/react-query";
-import type { ContribLevel, ContribResponse } from "../lib/github-types";
+import { useGithubContributions } from "../hooks/useGithubContributions";
+import type { ContribLevel } from "../lib/github-types";
 
 // Orange-scale palette so the heatmap sits inside the site's accent
 // colour rather than clashing with it like GitHub's default green.
@@ -30,16 +30,7 @@ function formatDate(iso: string): string {
 }
 
 export function Contributions() {
-  const { data, isLoading, isError } = useQuery<ContribResponse>({
-    queryKey: ["githubContributions"],
-    queryFn: async () => {
-      const res = await fetch("/api/github");
-      if (!res.ok) throw new Error("Failed");
-      return res.json();
-    },
-    staleTime: 60 * 60_000,
-    refetchOnWindowFocus: false,
-  });
+  const { data, isLoading, isError } = useGithubContributions();
 
   // When the grid overflows on narrow viewports, default the scroll
   // position to the right so "today" is visible.

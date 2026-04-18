@@ -5,25 +5,14 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { useQuery } from "@tanstack/react-query";
-import type { NowPlayingTrack } from "../lib/spotify-types";
+import { useNowPlaying } from "../hooks/useNowPlaying";
 
 type Variant = "hero" | "compact";
 
 export function NowPlaying({ variant = "compact" }: { variant?: Variant } = {}) {
   // react-query dedupes and polls for every instance sharing this key, so
   // the hero card and footer row stay in lockstep with one fetch loop.
-  const { data: track, isError } = useQuery<NowPlayingTrack>({
-    queryKey: ["nowPlaying"],
-    queryFn: async () => {
-      const res = await fetch("/api/spotify");
-      if (!res.ok) throw new Error("Failed");
-      return res.json();
-    },
-    refetchInterval: 30_000,
-    staleTime: 25_000,
-    refetchOnWindowFocus: false,
-  });
+  const { data: track, isError } = useNowPlaying();
 
   // Spotify is best-effort — if the endpoint errors, just hide the widget
   // rather than stretching a skeleton forever.
