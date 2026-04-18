@@ -8,6 +8,7 @@ const links = [
   { to: "/speaking", label: "Speaking", end: false },
   { to: "/map", label: "Map", end: false },
   { to: "/running", label: "Running", end: false },
+  { to: "/changelog", label: "Changelog", end: false },
 ] as const;
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>

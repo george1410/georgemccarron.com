@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -e
+
+# Prevent the amend from re-triggering this hook.
+if [ -n "$CHANGELOG_HOOK_RUNNING" ]; then
+  exit 0
+fi
+export CHANGELOG_HOOK_RUNNING=1
+
+# Skip during merges / rebases / cherry-picks.
+if [ -f ".git/MERGE_HEAD" ] \
+  || [ -f ".git/CHERRY_PICK_HEAD" ] \
+  || [ -f ".git/REVERT_HEAD" ] \
+  || [ -d ".git/rebase-merge" ] \
+  || [ -d ".git/rebase-apply" ]; then
+  exit 0
+fi
+
+# Generate entries for any uncached commits.
+if ! npm run --silent build:changelog; then
+  echo "[changelog] script failed — leaving commit as-is."
+  exit 0
+fi
+
+# If the cache changed, fold the update into the just-made commit.
+if ! git diff --quiet HEAD -- src/data/changelog.json; then
+  git add src/data/changelog.json
+  git commit --amend --no-edit --no-verify >/dev/null
+fi
