@@ -76,9 +76,7 @@ export function Contributions() {
   }
 
   if (isLoading || !data || data.weeks.length === 0) {
-    return (
-      <div className="h-[172px] bg-white dark:bg-zinc-800/50 rounded-2xl border border-stone-200 dark:border-zinc-700/50 animate-pulse" />
-    );
+    return <LoadingSkeleton />;
   }
 
   return (
@@ -252,6 +250,102 @@ export function Contributions() {
 }
 
 const GITHUB_USERNAME = "george1410";
+
+// Skeleton shown while the initial /api/github fetch is in flight. Mirrors
+// the real card's shape so the transition feels like content filling in
+// rather than a replacement.
+function LoadingSkeleton() {
+  const WEEKS = 53;
+  return (
+    <div className="bg-white dark:bg-zinc-800/50 rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-none dark:border dark:border-zinc-700/50">
+      {/* Header row: icon + "contributions" line + legend */}
+      <div className="flex items-baseline justify-between mb-5 gap-4">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+          <div className="h-3 w-56 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+        </div>
+        <div className="hidden sm:flex items-center gap-1.5">
+          <div className="h-3 w-8 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+          <div className="flex items-center gap-[3px]">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div
+                key={i}
+                className="w-[11px] h-[11px] rounded-[2px] bg-stone-200 dark:bg-zinc-700 animate-pulse"
+              />
+            ))}
+          </div>
+          <div className="h-3 w-8 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+        </div>
+      </div>
+
+      <div className="-mx-1 px-1 pb-1 overflow-hidden">
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "auto 1fr",
+            columnGap: "8px",
+            rowGap: "6px",
+            minWidth: "540px",
+          }}
+        >
+          <div />
+          {/* Month-label row — a few short bars scattered along the top */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: `repeat(${WEEKS}, minmax(0, 1fr))`,
+              gap: "3px",
+            }}
+          >
+            {[1, 6, 10, 15, 19, 24, 28, 33, 37, 42, 46, 51].map((col) => (
+              <div
+                key={col}
+                style={{ gridColumnStart: col }}
+                className="h-2 rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse"
+              />
+            ))}
+          </div>
+
+          {/* Day-label column — Mon/Wed/Fri bars */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+              gap: "3px",
+            }}
+          >
+            <span />
+            <span className="h-2 w-6 self-center rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+            <span />
+            <span className="h-2 w-6 self-center rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+            <span />
+            <span className="h-2 w-6 self-center rounded-full bg-stone-200 dark:bg-zinc-700 animate-pulse" />
+            <span />
+          </div>
+
+          {/* Main grid — uniform muted cells, gentle pulse */}
+          <div
+            style={{
+              display: "grid",
+              gap: "3px",
+              gridTemplateColumns: `repeat(${WEEKS}, minmax(0, 1fr))`,
+              gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+              aspectRatio: `${WEEKS * 11 + (WEEKS - 1) * 3} / ${7 * 11 + 6 * 3}`,
+            }}
+            className="animate-pulse"
+          >
+            {Array.from({ length: WEEKS * 7 }).map((_, i) => (
+              <div
+                key={i}
+                className="rounded-[2px] bg-stone-200/70 dark:bg-zinc-800"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function GithubIcon({ className }: { className?: string }) {
   return (
