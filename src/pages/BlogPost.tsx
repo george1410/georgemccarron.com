@@ -101,7 +101,7 @@ function AdjacentPostCard({
           <div className="mt-1.5 font-semibold text-stone-900 dark:text-zinc-50 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors leading-snug line-clamp-2">
             {post.title}
           </div>
-          <div className="mt-1 text-xs text-stone-500 dark:text-zinc-400 line-clamp-1">
+          <div className="mt-1 text-xs text-stone-500 dark:text-zinc-400 truncate">
             {post.subtitle}
           </div>
         </div>
