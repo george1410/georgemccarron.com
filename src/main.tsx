@@ -1,5 +1,9 @@
+// MUST be first — Sentry needs to initialise before any other code runs.
+import "./instrument";
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { reactErrorHandler } from "@sentry/react";
 import { App } from "./App";
 import "./index.css";
 
@@ -14,7 +18,14 @@ if (typeof window !== "undefined") {
   });
 }
 
-createRoot(document.getElementById("root")!).render(
+// React 19 delivers errors through these three callbacks — piping them to
+// Sentry captures uncaught errors, errors caught by error boundaries, and
+// recoverable errors alike.
+createRoot(document.getElementById("root")!, {
+  onUncaughtError: reactErrorHandler(),
+  onCaughtError: reactErrorHandler(),
+  onRecoverableError: reactErrorHandler(),
+}).render(
   <StrictMode>
     <App />
   </StrictMode>,

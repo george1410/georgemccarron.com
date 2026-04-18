@@ -2,6 +2,7 @@ import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import mdx from "@mdx-js/rollup";
 import tailwindcss from "@tailwindcss/vite";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
@@ -319,6 +320,9 @@ function generateOgPages(): Plugin {
 }
 
 export default defineConfig({
+  // `hidden` emits .map files for Sentry to upload but doesn't reference
+  // them from the bundles — end-users' browsers never download them.
+  build: { sourcemap: "hidden" },
   server: {
     proxy: {
       "/cv": {
@@ -340,5 +344,19 @@ export default defineConfig({
     vercelApiDev(),
     rssFeed(),
     generateOgPages(),
+    // Uploads source maps to Sentry after the bundle is built. Disabled
+    // automatically when SENTRY_AUTH_TOKEN is missing (e.g. local
+    // builds), so we don't need to gate it manually.
+    sentryVitePlugin({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      telemetry: false,
+      // Delete the .map files from the final bundle after upload so they
+      // aren't served alongside the app.
+      sourcemaps: {
+        filesToDeleteAfterUpload: ["dist/**/*.map"],
+      },
+    }),
   ],
 });
