@@ -35,6 +35,13 @@ type Commit = { hash: string; date: string; subject: string };
 
 type Cache = { entries: ChangelogEntry[]; skipped: string[] };
 
+// Dedupe key for a commit. Author-date + subject are preserved across
+// `git commit --amend --no-edit`, so amending (as the hook does) doesn't
+// cause the amended commit to look "new" to the script.
+function commitKey(input: { date: string; subject: string }): string {
+  return `${input.date}::${input.subject}`;
+}
+
 function loadCache(): Cache {
   if (!existsSync(CACHE_PATH)) return { entries: [], skipped: [] };
   const raw = JSON.parse(readFileSync(CACHE_PATH, "utf-8"));
@@ -171,8 +178,13 @@ async function main() {
 
   const client = new Anthropic({ apiKey });
   const cache = loadCache();
-  const processedHashes = new Set([
-    ...cache.entries.map((e) => e.hash),
+  // Each entry knows its own dedupe key (date + subject). Legacy entries
+  // without `subject` still dedupe via date-only as a fallback (still
+  // unique enough in practice for one-off commits on the same second).
+  const processedKeys = new Set<string>([
+    ...cache.entries.map((e) =>
+      e.subject ? commitKey({ date: e.date, subject: e.subject }) : e.date,
+    ),
     ...cache.skipped,
   ]);
   const totalCached = cache.entries.length + cache.skipped.length;
@@ -188,14 +200,16 @@ async function main() {
   const newEntries: ChangelogEntry[] = [];
   const newSkipped: string[] = [];
   for (const c of commits) {
-    const shortHash = c.hash.slice(0, 7);
-    if (processedHashes.has(shortHash)) continue;
+    const key = commitKey({ date: c.date, subject: c.subject });
+    if (processedKeys.has(key) || processedKeys.has(c.date)) continue;
 
-    process.stdout.write(`[changelog] summarising ${shortHash} "${c.subject}" … `);
+    process.stdout.write(
+      `[changelog] summarising ${c.hash.slice(0, 7)} "${c.subject}" … `,
+    );
     const result = await summarise(client, c);
     if (!result) {
       console.log("skip");
-      newSkipped.push(shortHash);
+      newSkipped.push(key);
       continue;
     }
 
@@ -204,7 +218,7 @@ async function main() {
       date: c.date,
       title: result.title,
       summary: result.summary,
-      hash: shortHash,
+      subject: c.subject,
     });
   }
 

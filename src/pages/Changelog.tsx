@@ -1,8 +1,6 @@
 import { useTitle } from "../hooks/useTitle";
 import { changelog } from "../data/changelog";
 
-const REPO_URL = "https://github.com/george1410/georgemccarron.com";
-
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -35,17 +33,8 @@ export function Changelog() {
                 aria-hidden="true"
                 className="absolute -left-[25px] md:-left-[33px] top-[7px] w-2 h-2 rounded-full bg-orange-400 ring-4 ring-[#faf8f5] dark:ring-zinc-900"
               />
-              <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-zinc-500">
-                <span>{formatDate(entry.date)}</span>
-                <span aria-hidden="true">&middot;</span>
-                <a
-                  href={`${REPO_URL}/commit/${entry.hash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-mono normal-case tracking-normal text-[10px] text-stone-400 dark:text-zinc-500 hover:text-orange-600 dark:hover:text-orange-400 transition-colors"
-                >
-                  {entry.hash}
-                </a>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-400 dark:text-zinc-500">
+                {formatDate(entry.date)}
               </div>
               <h2 className="mt-1 font-serif italic text-lg md:text-xl text-stone-900 dark:text-zinc-50 leading-snug">
                 {entry.title}

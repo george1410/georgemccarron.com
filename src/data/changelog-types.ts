@@ -4,5 +4,7 @@ export type ChangelogEntry = {
   date: string;
   title: string;
   summary: string;
-  hash: string;
+  // Original commit subject. Kept for dedupe (author-date + subject is
+  // stable across amends, unlike commit hash). Not rendered.
+  subject?: string;
 };

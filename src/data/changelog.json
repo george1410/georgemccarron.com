@@ -3,428 +3,357 @@
     {
       "date": "2026-04-18T22:34:15+01:00",
       "title": "Navigation menu collapse to \"more\"",
-      "summary": "Reorganized the navigation to hide secondary items behind a \"more\" dropdown on smaller screens. Keeps the header cleaner without sacrificing access to anything.",
-      "hash": "d8430aa"
+      "summary": "Reorganized the navigation to hide secondary items behind a \"more\" dropdown on smaller screens. Keeps the header cleaner without sacrificing access to anything."
     },
     {
       "date": "2026-04-18T22:27:22+01:00",
       "title": "Automated changelog tracking",
-      "summary": "Set up a system to automatically generate changelog entries from git commits. Now when I commit with a special format, the changelog page updates without manual editing.",
-      "hash": "7a01383"
+      "summary": "Set up a system to automatically generate changelog entries from git commits. Now when I commit with a special format, the changelog page updates without manual editing."
     },
     {
       "date": "2026-04-18T21:29:35+01:00",
       "title": "Error pages redesigned",
-      "summary": "Redesigned the 404 and error pages to be more useful and hopefully a bit less sad to land on. They're not just a dead end anymore.",
-      "hash": "feb5da3"
+      "summary": "Redesigned the 404 and error pages to be more useful and hopefully a bit less sad to land on. They're not just a dead end anymore."
     },
     {
       "date": "2026-04-18T16:47:27+01:00",
       "title": "Fixed older card truncation",
-      "summary": "Older blog post cards were getting cut off. Quick one-liner fix in the BlogPost component.",
-      "hash": "87bf8b4"
+      "summary": "Older blog post cards were getting cut off. Quick one-liner fix in the BlogPost component."
     },
     {
       "date": "2026-04-18T16:41:39+01:00",
       "title": "Navigation between blog posts",
-      "summary": "Added prev/next post links at the bottom of blog posts so you can browse through the archive without going back to the index.",
-      "hash": "0e4aba3"
+      "summary": "Added prev/next post links at the bottom of blog posts so you can browse through the archive without going back to the index."
     },
     {
       "date": "2026-04-18T16:29:58+01:00",
       "title": "Toast notification component",
-      "summary": "Added a toast component that shows when you copy your email. It's a small detail but makes the copy-to-clipboard action feel more responsive.",
-      "hash": "b09304d"
+      "summary": "Added a toast component that shows when you copy your email. It's a small detail but makes the copy-to-clipboard action feel more responsive."
     },
     {
       "date": "2026-04-18T16:09:46+01:00",
       "title": "Error states for API failures",
-      "summary": "Added proper error handling across GitHub, Spotify, and Strava integrations so pages don't break when API calls fail.",
-      "hash": "a42743f"
+      "summary": "Added proper error handling across GitHub, Spotify, and Strava integrations so pages don't break when API calls fail."
     },
     {
       "date": "2026-04-18T15:22:46+01:00",
       "title": "Improved error reporting in Sentry",
-      "summary": "Refactored error handling to get better insights into what's actually breaking. Instrument initialization changes should help surface more useful stack traces.",
-      "hash": "67f50c8"
+      "summary": "Refactored error handling to get better insights into what's actually breaking. Instrument initialization changes should help surface more useful stack traces."
     },
     {
       "date": "2026-04-18T15:14:44+01:00",
       "title": "Added Sentry error tracking",
-      "summary": "Set up Sentry across multiple API endpoints for better error monitoring and debugging. Now tracking issues on the GitHub, Spotify, Strava, and OG image generation endpoints.",
-      "hash": "8bb62b3"
+      "summary": "Set up Sentry across multiple API endpoints for better error monitoring and debugging. Now tracking issues on the GitHub, Spotify, Strava, and OG image generation endpoints."
     },
     {
       "date": "2026-04-18T15:00:28+01:00",
       "title": "Added error tracking with Sentry",
-      "summary": "Set up Sentry to catch and monitor runtime errors on the site. Now I'll actually know when things break in production.",
-      "hash": "171da16"
+      "summary": "Set up Sentry to catch and monitor runtime errors on the site. Now I'll actually know when things break in production."
     },
     {
       "date": "2026-04-18T14:29:14+01:00",
       "title": "Fixed chunk load errors",
-      "summary": "After deploying with code splitting, the site was crashing when loading certain chunks. Added error handling to catch and display these failures gracefully instead of just breaking the page.",
-      "hash": "f633fb5"
+      "summary": "After deploying with code splitting, the site was crashing when loading certain chunks. Added error handling to catch and display these failures gracefully instead of just breaking the page."
     },
     {
       "date": "2026-04-18T13:36:04+01:00",
       "title": "Fixed running page loading state",
-      "summary": "The Running page was showing a loading indicator at the wrong time. Fixed the timing so it only appears while data is actually being fetched.",
-      "hash": "15b3cda"
+      "summary": "The Running page was showing a loading indicator at the wrong time. Fixed the timing so it only appears while data is actually being fetched."
     },
     {
       "date": "2026-04-18T13:30:18+01:00",
       "title": "RSS feed for blog posts",
-      "summary": "Added an RSS feed so you can subscribe to new blog posts with your favorite reader. It's automatically generated when the site builds.",
-      "hash": "9facc0c"
+      "summary": "Added an RSS feed so you can subscribe to new blog posts with your favorite reader. It's automatically generated when the site builds."
     },
     {
       "date": "2026-04-18T13:05:01+01:00",
       "title": "Removed orange dots from pages",
-      "summary": "Cleaned up some visual elements that were scattered across the site. They seemed to be lingering from an earlier design iteration and weren't doing much.",
-      "hash": "2fd87e8"
+      "summary": "Cleaned up some visual elements that were scattered across the site. They seemed to be lingering from an earlier design iteration and weren't doing much."
     },
     {
       "date": "2026-04-18T13:02:51+01:00",
       "title": "Gradient titles everywhere",
-      "summary": "Made page titles consistently use gradient styling across the site instead of mixing different styles.",
-      "hash": "7485a3f"
+      "summary": "Made page titles consistently use gradient styling across the site instead of mixing different styles."
     },
     {
       "date": "2026-04-18T12:53:49+01:00",
       "title": "Added contributions to cmdk",
-      "summary": "Built and integrated a command palette component using the cmdk library, adding keyboard-driven navigation to the site.",
-      "hash": "2e7a837"
+      "summary": "Built and integrated a command palette component using the cmdk library, adding keyboard-driven navigation to the site."
     },
     {
       "date": "2026-04-18T12:46:42+01:00",
       "title": "GitHub contributions loading state",
-      "summary": "Added a loading state for the GitHub contributions section so it doesn't look broken while fetching data.",
-      "hash": "241541f"
+      "summary": "Added a loading state for the GitHub contributions section so it doesn't look broken while fetching data."
     },
     {
       "date": "2026-04-18T12:42:09+01:00",
       "title": "GitHub contributions on homepage",
-      "summary": "Added a live widget that shows my GitHub contributions graph on the home page. It pulls data from the GitHub API and displays the last year of activity.",
-      "hash": "bc826d8"
+      "summary": "Added a live widget that shows my GitHub contributions graph on the home page. It pulls data from the GitHub API and displays the last year of activity."
     },
     {
       "date": "2026-04-18T11:49:30+01:00",
       "title": "Mobile navigation actually works now",
-      "summary": "Rewrote the mobile nav component because it was kind of broken. Should be more reliable on smaller screens now.",
-      "hash": "3b50554"
+      "summary": "Rewrote the mobile nav component because it was kind of broken. Should be more reliable on smaller screens now."
     },
     {
       "date": "2026-04-18T11:47:21+01:00",
       "title": "Added Strava running stats",
-      "summary": "Integrated Strava API to pull running activity data. New /running page shows stats, maps, and activity details fetched directly from Strava.",
-      "hash": "c2674b6"
+      "summary": "Integrated Strava API to pull running activity data. New /running page shows stats, maps, and activity details fetched directly from Strava."
     },
     {
       "date": "2026-04-18T10:59:32+01:00",
       "title": "Now playing loading state",
-      "summary": "Added a loading indicator to the now playing section while spotify data is being fetched, so it doesn't just sit there blank.",
-      "hash": "10e7503"
+      "summary": "Added a loading indicator to the now playing section while spotify data is being fetched, so it doesn't just sit there blank."
     },
     {
       "date": "2026-04-18T02:12:36+01:00",
       "title": "Simplified map component logic",
-      "summary": "Refactored the WorldMap component to load more efficiently, cutting the code size roughly in half while keeping the same functionality.",
-      "hash": "b3ac8da"
+      "summary": "Refactored the WorldMap component to load more efficiently, cutting the code size roughly in half while keeping the same functionality."
     },
     {
       "date": "2026-04-18T02:08:59+01:00",
       "title": "Command palette improvements",
-      "summary": "Fixed some bugs in the command palette and tweaked the styling. It should feel more responsive now.",
-      "hash": "b3a6b2f"
+      "summary": "Fixed some bugs in the command palette and tweaked the styling. It should feel more responsive now."
     },
     {
       "date": "2026-04-18T01:45:30+01:00",
       "title": "Spotify fallback to recently played",
-      "summary": "Now playing widget now shows your most recently played track if nothing's currently playing, so you'll always see something instead of a blank state.",
-      "hash": "581d866"
+      "summary": "Now playing widget now shows your most recently played track if nothing's currently playing, so you'll always see something instead of a blank state."
     },
     {
       "date": "2026-04-18T01:42:02+01:00",
       "title": "Fixed duplicate Spotify API polling",
-      "summary": "Was hitting the Spotify API twice per poll interval. Refactored the polling logic to centralize it in App.tsx so the data flows down to components instead of each one requesting independently.",
-      "hash": "e5cd371"
+      "summary": "Was hitting the Spotify API twice per poll interval. Refactored the polling logic to centralize it in App.tsx so the data flows down to components instead of each one requesting independently."
     },
     {
       "date": "2026-04-18T01:34:53+01:00",
       "title": "Now playing widget",
-      "summary": "Built a new component that shows what I'm currently listening to. Hooked it up to pull live data and styled it to fit the site.",
-      "hash": "5f4c00a"
+      "summary": "Built a new component that shows what I'm currently listening to. Hooked it up to pull live data and styled it to fit the site."
     },
     {
       "date": "2026-04-18T00:53:37+01:00",
       "title": "Added world map and now playing widget",
-      "summary": "Built out a bunch of new features including an interactive world map, a now playing component that integrates with Spotify, and added travel data tracking. Also set up the auth scripts needed to keep everything connected.",
-      "hash": "f1ef2d4"
+      "summary": "Built out a bunch of new features including an interactive world map, a now playing component that integrates with Spotify, and added travel data tracking. Also set up the auth scripts needed to keep everything connected."
     },
     {
       "date": "2026-04-17T23:39:07+01:00",
       "title": "Added map units data",
-      "summary": "Built a script to generate map unit data and added it to the public assets. This powers whatever map feature is being built.",
-      "hash": "74baea0"
+      "summary": "Built a script to generate map unit data and added it to the public assets. This powers whatever map feature is being built."
     },
     {
       "date": "2026-04-17T21:55:14+01:00",
       "title": "Added open graph image generation",
-      "summary": "Built a dynamic OG image generator so posts get nice preview cards when shared on social media or messaging apps.",
-      "hash": "4b2b671"
+      "summary": "Built a dynamic OG image generator so posts get nice preview cards when shared on social media or messaging apps."
     },
     {
       "date": "2026-04-17T21:46:00+01:00",
       "title": "Added Vercel analytics",
-      "summary": "Integrated Vercel's analytics to track visitor data and see what content folks are actually checking out.",
-      "hash": "54c6e3f"
+      "summary": "Integrated Vercel's analytics to track visitor data and see what content folks are actually checking out."
     },
     {
       "date": "2026-04-17T19:37:15+01:00",
       "title": "Limited posts on home page",
-      "summary": "The home page now only shows the most recent posts instead of everything. Should keep things snappier as the archive grows.",
-      "hash": "9f00645"
+      "summary": "The home page now only shows the most recent posts instead of everything. Should keep things snappier as the archive grows."
     },
     {
       "date": "2026-04-17T19:37:00+01:00",
       "title": "Timeline now has animations",
-      "summary": "Added fade-in and stagger animations to the timeline component. Each event now animates in as the page loads, making it feel a bit more polished.",
-      "hash": "3f28d04"
+      "summary": "Added fade-in and stagger animations to the timeline component. Each event now animates in as the page loads, making it feel a bit more polished."
     },
     {
       "date": "2026-04-10T23:06:37+01:00",
       "title": "Added dissertation PDF",
-      "summary": "Published my dissertation as a downloadable PDF on the site. It's about 1.4 MB, so fair warning if you're on a slow connection.",
-      "hash": "97790c1"
+      "summary": "Published my dissertation as a downloadable PDF on the site. It's about 1.4 MB, so fair warning if you're on a slow connection."
     },
     {
       "date": "2026-04-10T22:00:02+01:00",
       "title": "Mobile navigation fixed",
-      "summary": "The mobile nav wasn't working properly on smaller screens. Got that sorted out.",
-      "hash": "64873ba"
+      "summary": "The mobile nav wasn't working properly on smaller screens. Got that sorted out."
     },
     {
       "date": "2026-04-10T21:54:04+01:00",
       "title": "Complete website redesign",
-      "summary": "Migrated from Next.js to a Vite-based React setup. New design with command palette, improved navigation, and simplified architecture overall.",
-      "hash": "6a5518f"
+      "summary": "Migrated from Next.js to a Vite-based React setup. New design with command palette, improved navigation, and simplified architecture overall."
     },
     {
       "date": "2026-01-18T17:07:58Z",
       "title": "Added incident.io to timeline",
-      "summary": "Updated the timeline to include incident.io, documenting another tool or service I've been working with.",
-      "hash": "c0948d0"
+      "summary": "Updated the timeline to include incident.io, documenting another tool or service I've been working with."
     },
     {
       "date": "2026-01-18T15:47:30Z",
       "title": "Updated bio to mention incident.io",
-      "summary": "Added incident.io to my bio. Currently working there and thought it deserved a mention.",
-      "hash": "84787c3"
+      "summary": "Added incident.io to my bio. Currently working there and thought it deserved a mention."
     },
     {
       "date": "2025-12-20T20:24:54Z",
       "title": "Fixed text selection color",
-      "summary": "The text selection highlight now uses the right color. It was bothering me more than it probably should have.",
-      "hash": "1a6da45"
+      "summary": "The text selection highlight now uses the right color. It was bothering me more than it probably should have."
     },
     {
       "date": "2025-10-14T10:13:18+01:00",
       "title": "Added CV as downloadable PDF",
-      "summary": "Added a CV PDF to the site so people can download my résumé. Handy for when folks want something more formal than what's on the main site.",
-      "hash": "38ebcf5"
+      "summary": "Added a CV PDF to the site so people can download my résumé. Handy for when folks want something more formal than what's on the main site."
     },
     {
       "date": "2025-08-20T22:25:19+01:00",
       "title": "Made timeline logos clickable",
-      "summary": "The company and project logos on the timeline now link to their websites. Makes it easier to jump around and check things out.",
-      "hash": "902d92e"
+      "summary": "The company and project logos on the timeline now link to their websites. Makes it easier to jump around and check things out."
     },
     {
       "date": "2025-08-20T22:00:17+01:00",
       "title": "Timeline and author section updates",
-      "summary": "Updated the timeline component with more details and refreshed the author section with a new photo.",
-      "hash": "92c069e"
+      "summary": "Updated the timeline component with more details and refreshed the author section with a new photo."
     },
     {
       "date": "2024-04-20T22:13:35+01:00",
       "title": "Supabase pausing prevention guide",
-      "summary": "Published a blog post about preventing Supabase projects from pausing during inactivity, including strategies to keep free-tier projects alive.",
-      "hash": "b67826f"
+      "summary": "Published a blog post about preventing Supabase projects from pausing during inactivity, including strategies to keep free-tier projects alive."
     },
     {
       "date": "2024-02-17T14:50:42Z",
       "title": "Blog posts now statically cached",
-      "summary": "Removed the force dynamic setting from blog posts, which means they'll be statically generated and cached instead of regenerated on every request.",
-      "hash": "501b3cb"
+      "summary": "Removed the force dynamic setting from blog posts, which means they'll be statically generated and cached instead of regenerated on every request."
     },
     {
       "date": "2024-02-11T22:54:31Z",
       "title": "RSC streaming with Suspense",
-      "summary": "Added streaming for React Server Components on blog posts using Suspense. The like button now loads independently without blocking the page.",
-      "hash": "ef0ec4d"
+      "summary": "Added streaming for React Server Components on blog posts using Suspense. The like button now loads independently without blocking the page."
     },
     {
       "date": "2024-02-11T00:54:15Z",
       "title": "Prevent Supabase project from pausing",
-      "summary": "Added a health check endpoint that pings the API regularly, keeping the Supabase project active so it doesn't go idle.",
-      "hash": "1394b7e"
+      "summary": "Added a health check endpoint that pings the API regularly, keeping the Supabase project active so it doesn't go idle."
     },
     {
       "date": "2024-02-10T22:02:56Z",
       "title": "Fixed hydration mismatch with localStorage",
-      "summary": "Added a ClientOnly wrapper component to prevent Next.js hydration errors when accessing localStorage. This fixes the like button on blog posts.",
-      "hash": "ae7630a"
+      "summary": "Added a ClientOnly wrapper component to prevent Next.js hydration errors when accessing localStorage. This fixes the like button on blog posts."
     },
     {
       "date": "2024-01-21T23:31:28Z",
       "title": "Set metadata base URL",
-      "summary": "Fixed the base URL in page metadata so social share previews and canonical links work correctly.",
-      "hash": "82e6acf"
+      "summary": "Fixed the base URL in page metadata so social share previews and canonical links work correctly."
     },
     {
       "date": "2024-01-21T22:42:55Z",
       "title": "Post likes feature",
-      "summary": "Added the ability to like blog posts. Each post now has a heart button that persists likes to the database.",
-      "hash": "8878618"
+      "summary": "Added the ability to like blog posts. Each post now has a heart button that persists likes to the database."
     },
     {
       "date": "2024-01-21T18:48:23Z",
       "title": "Set up local development database",
-      "summary": "Added Docker Compose setup for a local dev database so I can develop offline without hitting external services.",
-      "hash": "f8b1ffb"
+      "summary": "Added Docker Compose setup for a local dev database so I can develop offline without hitting external services."
     },
     {
       "date": "2024-01-21T17:49:08Z",
       "title": "Added metadata to blog posts",
-      "summary": "Blog posts now include metadata like publish date and reading time. Makes each post feel a bit more intentional.",
-      "hash": "571febe"
+      "summary": "Blog posts now include metadata like publish date and reading time. Makes each post feel a bit more intentional."
     },
     {
       "date": "2024-01-21T17:14:56Z",
       "title": "Wrote about rendering rich markdown tables",
-      "summary": "Added a post on rendering rich markdown table cells with custom components. Includes some experiments with handling complex content inside markdown tables.",
-      "hash": "269c71f"
+      "summary": "Added a post on rendering rich markdown table cells with custom components. Includes some experiments with handling complex content inside markdown tables."
     },
     {
       "date": "2024-01-21T17:01:02Z",
       "title": "Markdown emoji support",
-      "summary": "Added support for markdown emojis in posts and pages. Now you can use :smile: and similar shortcuts instead of pasting unicode directly.",
-      "hash": "8b02d3e"
+      "summary": "Added support for markdown emojis in posts and pages. Now you can use :smile: and similar shortcuts instead of pasting unicode directly."
     },
     {
       "date": "2024-01-21T15:57:40Z",
       "title": "Made blog text smaller",
-      "summary": "Dialed down the font size on blog posts. It was a bit too large.",
-      "hash": "16ce06c"
+      "summary": "Dialed down the font size on blog posts. It was a bit too large."
     },
     {
       "date": "2024-01-21T15:56:59Z",
       "title": "Fixed inline code styling",
-      "summary": "Tweaked the Tailwind config to fix how inline code looks throughout the site. Nothing major, just making sure it's consistent.",
-      "hash": "30a94bc"
+      "summary": "Tweaked the Tailwind config to fix how inline code looks throughout the site. Nothing major, just making sure it's consistent."
     },
     {
       "date": "2024-01-21T14:30:47Z",
       "title": "Fixed layout width issue",
-      "summary": "The main layout was rendering wider than intended on some screens. Tweaked the width constraints in the layout component to fix it.",
-      "hash": "466729a"
+      "summary": "The main layout was rendering wider than intended on some screens. Tweaked the width constraints in the layout component to fix it."
     },
     {
       "date": "2024-01-21T14:18:59Z",
       "title": "Added typed route validation",
-      "summary": "Set up Next.js typed routes to catch route mismatches at compile time. Should prevent a whole class of link-breaking bugs.",
-      "hash": "a291f2a"
+      "summary": "Set up Next.js typed routes to catch route mismatches at compile time. Should prevent a whole class of link-breaking bugs."
     },
     {
       "date": "2024-01-21T13:25:54Z",
       "title": "Added Web Vitals monitoring",
-      "summary": "Integrated a speed insights library to track Core Web Vitals. Mostly curious to see how the site actually performs in the wild rather than just in local dev.",
-      "hash": "57d232e"
+      "summary": "Integrated a speed insights library to track Core Web Vitals. Mostly curious to see how the site actually performs in the wild rather than just in local dev."
     },
     {
       "date": "2024-01-21T13:21:59Z",
       "title": "Added analytics tracking",
-      "summary": "Set up analytics on the site to start tracking visitor behavior and page performance.",
-      "hash": "594786e"
+      "summary": "Set up analytics on the site to start tracking visitor behavior and page performance."
     },
     {
       "date": "2024-01-21T13:17:39Z",
       "title": "Updated downsizing post",
-      "summary": "Expanded the downsizing post with more content and thoughts on the topic. Added a few more sections and refined existing material.",
-      "hash": "12b0d1f"
+      "summary": "Expanded the downsizing post with more content and thoughts on the topic. Added a few more sections and refined existing material."
     },
     {
       "date": "2023-12-31T00:32:16Z",
       "title": "Images now zoom on hover",
-      "summary": "Added a little hover effect to blog post grid images so they scale up slightly. Makes the grid feel more interactive.",
-      "hash": "0ee471c"
+      "summary": "Added a little hover effect to blog post grid images so they scale up slightly. Makes the grid feel more interactive."
     },
     {
       "date": "2023-12-02T17:33:38Z",
       "title": "Show unpublished posts in dev",
-      "summary": "Unpublished posts now show up when running the site locally, making it easier to draft and preview content before publishing.",
-      "hash": "735afff"
+      "summary": "Unpublished posts now show up when running the site locally, making it easier to draft and preview content before publishing."
     },
     {
       "date": "2023-12-02T01:48:29Z",
       "title": "Draft post support",
-      "summary": "Added a drafts system so I can publish posts-in-progress without them showing up on the blog yet. Currently working on posts about downsizing and a fake GPT thing.",
-      "hash": "076a0c9"
+      "summary": "Added a drafts system so I can publish posts-in-progress without them showing up on the blog yet. Currently working on posts about downsizing and a fake GPT thing."
     },
     {
       "date": "2023-12-02T01:39:31Z",
       "title": "Fixed mobile layout issues",
-      "summary": "Tweaked some spacing and sizing on the homepage and talk list components to look better on smaller screens.",
-      "hash": "a0541d0"
+      "summary": "Tweaked some spacing and sizing on the homepage and talk list components to look better on smaller screens."
     },
     {
       "date": "2023-12-02T01:33:38Z",
       "title": "Now playing auto-refreshes",
-      "summary": "The now playing widget updates automatically in the background instead of requiring a page refresh to see what I'm listening to.",
-      "hash": "575b24f"
+      "summary": "The now playing widget updates automatically in the background instead of requiring a page refresh to see what I'm listening to."
     },
     {
       "date": "2023-12-01T22:07:03Z",
       "title": "Updated Nx talk content",
-      "summary": "Updated the content and details for the Nx monorepo talk, including minor tweaks to how it's displayed on the site.",
-      "hash": "7e49444"
+      "summary": "Updated the content and details for the Nx monorepo talk, including minor tweaks to how it's displayed on the site."
     },
     {
       "date": "2023-12-01T01:00:04Z",
       "title": "Extracted social icons component",
-      "summary": "Pulled social media icons out into a reusable component. Now used in both the footer and author bio section.",
-      "hash": "cffc88e"
+      "summary": "Pulled social media icons out into a reusable component. Now used in both the footer and author bio section."
     },
     {
       "date": "2023-12-01T00:43:51Z",
       "title": "Fixed stale Spotify data",
-      "summary": "The site was sometimes showing outdated Spotify listening data. Added a cache invalidation to make sure it refreshes properly.",
-      "hash": "85a365f"
+      "summary": "The site was sometimes showing outdated Spotify listening data. Added a cache invalidation to make sure it refreshes properly."
     },
     {
       "date": "2023-12-01T00:43:42Z",
       "title": "Added talks section",
-      "summary": "Built out a speaking page with individual talk pages. Added a new talk about building maintainable JavaScript monorepos with Nx.",
-      "hash": "cf91901"
+      "summary": "Built out a speaking page with individual talk pages. Added a new talk about building maintainable JavaScript monorepos with Nx."
     },
     {
       "date": "2023-11-28T23:36:46Z",
       "title": "Extracted Timeline component",
-      "summary": "Moved timeline rendering logic out of the main page into its own component to keep things cleaner.",
-      "hash": "f669147"
+      "summary": "Moved timeline rendering logic out of the main page into its own component to keep things cleaner."
     },
     {
       "date": "2023-11-28T02:00:50Z",
       "title": "Now playing widget",
-      "summary": "Added a now playing widget powered by Spotify API that shows what I'm currently listening to in the footer.",
-      "hash": "294a013"
+      "summary": "Added a now playing widget powered by Spotify API that shows what I'm currently listening to in the footer."
     },
     {
       "date": "2023-11-27T23:06:08Z",
       "title": "Added about the author box",
-      "summary": "Blog posts now have a little bio box at the bottom so people know who's writing these things.",
-      "hash": "159b905"
+      "summary": "Blog posts now have a little bio box at the bottom so people know who's writing these things."
     }
   ],
   "skipped": [
@@ -469,6 +398,22 @@
     "81d7a74",
     "3617294",
     "e96c75f",
-    "c0734d0"
+    "c0734d0",
+    "2026-04-10T22:02:43+01:00::fix some info",
+    "2026-04-10T22:05:44+01:00::updates",
+    "2026-04-17T21:57:02+01:00::fix build",
+    "2026-04-17T23:06:52+01:00::remove cache files",
+    "2026-04-17T23:07:05+01:00::update gitignore",
+    "2026-04-18T00:54:54+01:00::fix build",
+    "2026-04-18T01:52:11+01:00::rename timeline",
+    "2026-04-18T12:59:24+01:00::normalise run polylines",
+    "2026-04-18T13:32:33+01:00::fix rss",
+    "2026-04-18T14:18:51+01:00::update footer",
+    "2026-04-18T14:25:52+01:00::remove subtitle",
+    "2026-04-18T15:20:11+01:00::better error handling",
+    "2026-04-18T15:34:52+01:00::tweaking sentry",
+    "2026-04-18T16:19:54+01:00::refactor data fetching",
+    "2026-04-18T16:45:20+01:00::tweak",
+    "2026-04-18T22:51:56+01:00::remove hashes from changelog"
   ]
 }

@@ -22,7 +22,9 @@ if ! npm run --silent build:changelog; then
   exit 0
 fi
 
-# If the cache changed, fold the update into the just-made commit.
+# Fold the cache update into the just-made commit. We dedupe by
+# (author-date + subject) rather than commit hash, so the amend's new
+# hash doesn't cause re-processing.
 if ! git diff --quiet HEAD -- src/data/changelog.json; then
   git add src/data/changelog.json
   git commit --amend --no-edit --no-verify >/dev/null
