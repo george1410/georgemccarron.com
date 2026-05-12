@@ -1,5 +1,11 @@
 [
   {
+    "date": "2026-05-12T20:18:26+01:00",
+    "subject": "move washington to visited",
+    "title": "Visited Washington",
+    "summary": "Finally made it to Washington. Updated my travel list to reflect it."
+  },
+  {
     "date": "2026-04-18T23:01:27+01:00",
     "subject": "regenerate changelog",
     "skipped": true

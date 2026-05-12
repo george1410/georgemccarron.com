@@ -30,7 +30,7 @@ export const visitedCountries: Visit[] = [
   { name: "Jersey", date: "2016-06" },
 ];
 
-export const visitedStates: Visit[] = [];
+export const visitedStates: Visit[] = [{ name: "Washington", date: "2026-05" }];
 
 export const plannedCountries: Visit[] = [];
-export const plannedStates: Visit[] = [{ name: "Washington", date: "2026-05" }];
+export const plannedStates: Visit[] = [];
