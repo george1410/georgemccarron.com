@@ -20,7 +20,7 @@ export const timeline: TimelineEntry[] = [
     companyDescription:
       "All-in-one platform for on-call, incident response, and status pages — used by OpenAI, Netflix, and Airbnb.",
     excerpt:
-      "Building enterprise integrations with tools like Cisco Webex and ServiceNow in Go and TypeScript/React, helping land multiple large customers.",
+      "Building Investigations - our newest product that resolves incidents automatically using AI.",
     url: "https://incident.io",
     logo: "https://img.logo.dev/incident.io?token=pk_W6gl0JlERfaMoT1Au5v4Xg&retina=true&format=png&size=64",
     roles: [{ title: "Product Engineer", date: "Jan 2026 – Present" }],
