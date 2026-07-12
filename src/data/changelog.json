@@ -1,5 +1,11 @@
 [
   {
+    "date": "2026-07-12T17:29:45+01:00",
+    "subject": "remove strava integration because its no longer free",
+    "title": "Removed Running page",
+    "summary": "Strava's API is now paid-only, so the Running page and all the Strava integration behind it are gone — the API routes, hooks, and nav links included."
+  },
+  {
     "date": "2026-05-12T20:18:26+01:00",
     "subject": "move washington to visited",
     "title": "Visited Washington",
