@@ -20,10 +20,6 @@ const MapPage = lazy(() =>
   import("./pages/Map").then((m) => ({ default: m.MapPage })),
 );
 
-const RunningPage = lazy(() =>
-  import("./pages/Running").then((m) => ({ default: m.Running })),
-);
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Layout />}>
@@ -43,14 +39,6 @@ const router = createBrowserRouter(
               }
             >
               <MapPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="running"
-          element={
-            <Suspense fallback={null}>
-              <RunningPage />
             </Suspense>
           }
         />

@@ -12,7 +12,6 @@ const primaryLinks = [
 
 const secondaryLinks = [
   { to: "/map", label: "Map" },
-  { to: "/running", label: "Running" },
   { to: "/changelog", label: "Changelog" },
 ] as const;
 

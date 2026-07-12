@@ -38,7 +38,6 @@ function allCandidates(): Candidate[] {
     { to: "/blog", label: "Blog" },
     { to: "/speaking", label: "Speaking" },
     { to: "/map", label: "Map" },
-    { to: "/running", label: "Running" },
     ...posts.map((p) => ({ to: `/blog/${p.slug}`, label: p.title })),
     ...talks.map((t) => ({ to: `/speaking/${t.slug}`, label: t.title })),
   ];

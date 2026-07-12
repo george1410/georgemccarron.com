@@ -9,7 +9,6 @@
     "build:map": "tsx scripts/build-map-units.ts",
     "build:changelog": "tsx scripts/build-changelog.ts",
     "spotify:auth": "tsx scripts/spotify-auth.ts",
-    "strava:auth": "tsx scripts/strava-auth.ts",
     "setup:hooks": "git config core.hooksPath .githooks"
   },
   "dependencies": {
