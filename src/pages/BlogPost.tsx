@@ -9,6 +9,12 @@ import { ShareButtons } from "../components/ShareButtons";
 import { Minimap } from "../components/Minimap";
 import { ScrollProgress } from "../components/ScrollProgress";
 import { useTitle } from "../hooks/useTitle";
+import {
+  formatViewCount,
+  shouldShowViewCount,
+  usePostViewCount,
+  useTrackPostView,
+} from "../hooks/usePostViews";
 import type { ReactNode } from "react";
 
 const postModules = import.meta.glob<{
@@ -130,6 +136,8 @@ export function BlogPost() {
       ? posts[postIndex + 1]
       : undefined;
   useTitle(post?.title ?? "Blog");
+  useTrackPostView(slug);
+  const { data: viewCount } = usePostViewCount(slug);
 
   useEffect(() => {
     if (!slug) return;
@@ -195,6 +203,13 @@ export function BlogPost() {
             <>
               <span className="mx-2">&middot;</span>
               {readingTime} min read
+            </>
+          )}
+          {shouldShowViewCount(viewCount) && (
+            <>
+              <span className="mx-2">&middot;</span>
+              {formatViewCount(viewCount)}{" "}
+              {viewCount === 1 ? "view" : "views"}
             </>
           )}
         </div>
