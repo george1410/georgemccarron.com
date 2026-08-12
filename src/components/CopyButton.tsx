@@ -12,7 +12,7 @@ export function CopyButton({ code }: { code: string }) {
   return (
     <button
       onClick={copy}
-      className="absolute top-3 right-3 p-1 rounded-md text-zinc-500 hover:text-zinc-300 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+      className="absolute top-3 right-3 z-10 p-1 rounded-md text-zinc-500 hover:text-zinc-300 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
       aria-label="Copy code"
     >
       {copied ? (
@@ -43,9 +43,11 @@ export function Pre({ children, ...props }: { children?: ReactNode } & Record<st
   const code = getTextContent(children).replace(/\n$/, "");
 
   return (
-    <pre {...props} className={`${(props.className as string) ?? ""} group relative`}>
+    <div className="group relative">
       <CopyButton code={code} />
-      {children}
-    </pre>
+      <pre {...props} className={(props.className as string) ?? ""}>
+        {children}
+      </pre>
+    </div>
   );
 }
