@@ -7,7 +7,7 @@
 //
 // See scripts/spotify-auth.ts for the one-time refresh-token bootstrap.
 
-import "./_sentry";
+import { captureApiError, wrapApiHandler } from "./_sentry";
 import type { NowPlayingTrack } from "../src/lib/spotify-types";
 
 export const config = {
@@ -90,7 +90,7 @@ function errorResponse(message: string) {
   });
 }
 
-export default async function handler(): Promise<Response> {
+async function handler(): Promise<Response> {
   try {
     const accessToken = await getAccessToken();
 
@@ -127,7 +127,9 @@ export default async function handler(): Promise<Response> {
 
     return json({ isPlaying: false });
   } catch (err) {
-    console.error("[api/spotify]", err);
+    captureApiError(err);
     return errorResponse("Spotify unavailable");
   }
 }
+
+export default wrapApiHandler("spotify", handler);

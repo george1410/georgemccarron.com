@@ -1,5 +1,5 @@
 import { ImageResponse } from "@vercel/og";
-import "./_sentry";
+import { wrapApiHandler } from "./_sentry";
 
 export const config = {
   runtime: "edge",
@@ -126,14 +126,4 @@ async function renderOg(request: Request) {
   );
 }
 
-// Thin wrapper around renderOg so failures surface in Sentry (via the
-// console-capture integration) rather than being invisible inside
-// Vercel's generic 500.
-export default async function handler(request: Request) {
-  try {
-    return await renderOg(request);
-  } catch (err) {
-    console.error("[api/og]", err);
-    throw err;
-  }
-}
+export default wrapApiHandler("og", renderOg);

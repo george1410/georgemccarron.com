@@ -122,6 +122,7 @@ export function BlogPost() {
     components?: Record<string, ComponentType<Record<string, unknown>>>;
   }> | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [readingTime, setReadingTime] = useState<number | null>(null);
 
   const proseRef = useRef<HTMLDivElement>(null);
@@ -141,17 +142,42 @@ export function BlogPost() {
 
   useEffect(() => {
     if (!slug) return;
+
+    let cancelled = false;
     setLoading(true);
+    setLoadError(false);
     setContent(null);
+
     const loader = postLoaders[slug];
-    if (loader) {
-      loader().then((mod) => {
-        setContent(() => mod.default);
+    if (!loader) {
+      setLoading(false);
+      return;
+    }
+
+    loader()
+      .then((mod) => {
+        if (cancelled) return;
+        // `mod` can be missing if the MDX chunk fails to evaluate (seen on
+        // old browsers). Reading `.default` inside the setState updater
+        // throws during render and takes down the error boundary.
+        const component = mod?.default;
+        if (typeof component === "function") {
+          setContent(() => component);
+        } else {
+          setLoadError(true);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("[BlogPost] failed to load MDX for", slug, err);
+        setLoadError(true);
         setLoading(false);
       });
-    } else {
-      setLoading(false);
-    }
+
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   // Calculate reading time from rendered text
@@ -247,6 +273,10 @@ export function BlogPost() {
           <div ref={proseRef} className="prose prose-stone dark:prose-invert max-w-none prose-headings:font-semibold prose-headings:tracking-tight">
             <Content components={mdxComponents} />
           </div>
+        ) : loadError ? (
+          <p className="text-stone-500 dark:text-zinc-400">
+            Couldn&apos;t load this post. Refresh to try again.
+          </p>
         ) : null}
 
         {!loading && <ShareButtons title={post.title} />}

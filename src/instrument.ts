@@ -28,8 +28,9 @@ Sentry.init({
       matchRoutes,
     }),
     Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true,
+      // Personal site — no auth, forms, or other sensitive data to mask.
+      maskAllText: false,
+      blockAllMedia: false,
     }),
     // Turn any `console.error(...)` call into a Sentry event so code paths
     // that log-and-return (rather than throw) still surface. Scoped to

@@ -9,7 +9,7 @@
 // GET  /api/views?slug=<slug>    → { slug, views }
 // POST /api/views { "slug": "…" } → increment, returns { slug, views }
 
-import "./_sentry";
+import { wrapApiHandler } from "./_sentry";
 import { Redis } from "@upstash/redis";
 import { posts } from "../src/data/posts";
 import type {
@@ -64,7 +64,7 @@ async function getViews(
   );
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function handler(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const slugParam = url.searchParams.get("slug");
 
@@ -117,3 +117,5 @@ export default async function handler(request: Request): Promise<Response> {
 
   return json({ error: "Method not allowed" }, 405);
 }
+
+export default wrapApiHandler("views", handler);

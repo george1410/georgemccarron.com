@@ -11,7 +11,7 @@
 // Env vars required (set on Vercel):
 //   GITHUB_USERNAME  — the login whose calendar to fetch (e.g. "george1410")
 
-import "./_sentry";
+import { captureApiError, wrapApiHandler } from "./_sentry";
 import type {
   ContribDay,
   ContribLevel,
@@ -111,11 +111,11 @@ function parseHtml(html: string): ContribResponse {
   return { totalContributions, weeks: cellsToWeeks(cells) };
 }
 
-export default async function handler(): Promise<Response> {
+async function handler(): Promise<Response> {
   const user = process.env.GITHUB_USERNAME;
 
   if (!user) {
-    console.error("[api/github] Missing GITHUB_USERNAME env var");
+    captureApiError(new Error("Missing GITHUB_USERNAME env var"));
     return errorResponse("GitHub not configured");
   }
 
@@ -135,11 +135,13 @@ export default async function handler(): Promise<Response> {
       },
     });
 
-    if (!res.ok) throw new Error(`github profile ${res.status}`);
+    if (!res.ok) throw new Error(`GitHub profile fetch failed (${res.status})`);
     const html = await res.text();
     return json(parseHtml(html));
   } catch (err) {
-    console.error("[api/github]", err);
+    captureApiError(err, { upstream: url });
     return errorResponse("GitHub unavailable");
   }
 }
+
+export default wrapApiHandler("github", handler);
