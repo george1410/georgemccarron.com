@@ -7,12 +7,9 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "build:map": "tsx scripts/build-map-units.ts",
-    "build:changelog": "tsx scripts/build-changelog.ts",
-    "spotify:auth": "tsx scripts/spotify-auth.ts",
-    "setup:hooks": "git config core.hooksPath .githooks"
+    "spotify:auth": "tsx scripts/spotify-auth.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.90.0",
     "@mdx-js/react": "^3.1.0",
     "@sentry/react": "^10.49.0",
     "@sentry/vercel-edge": "^10.49.0",

@@ -14,7 +14,6 @@ import { Speaking } from "./pages/Speaking";
 import { TalkPage } from "./pages/TalkPage";
 import { NotFound } from "./pages/NotFound";
 import { ErrorPage } from "./pages/ErrorPage";
-import { Changelog } from "./pages/Changelog";
 
 const MapPage = lazy(() =>
   import("./pages/Map").then((m) => ({ default: m.MapPage })),
@@ -29,7 +28,6 @@ const router = createBrowserRouter(
         <Route path="blog/:slug" element={<BlogPost />} />
         <Route path="speaking" element={<Speaking />} />
         <Route path="speaking/:slug" element={<TalkPage />} />
-        <Route path="changelog" element={<Changelog />} />
         <Route
           path="map"
           element={

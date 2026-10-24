@@ -95,7 +95,6 @@ export function CommandPalette() {
     { label: "Blog", action: () => go("/blog"), section: "Pages", icon: <PencilIcon /> },
     { label: "Speaking", action: () => go("/speaking"), section: "Pages", icon: <MicIcon /> },
     { label: "Map", action: () => go("/map"), section: "Pages", icon: <MapPinIcon /> },
-    { label: "Changelog", action: () => go("/changelog"), section: "Pages", icon: <ChangelogIcon /> },
     ...posts.map((p) => ({
       label: p.title,
       sublabel: p.subtitle,
@@ -449,15 +448,6 @@ function MusicIcon() {
       <path d="M9 18V5l12-2v13" />
       <circle cx="6" cy="18" r="3" />
       <circle cx="18" cy="16" r="3" />
-    </svg>
-  );
-}
-function ChangelogIcon() {
-  return (
-    <svg {...strokeProps}>
-      <path d="M12 8v4l3 2" />
-      <path d="M3 12a9 9 0 1 0 3-6.7" />
-      <path d="M3 4v5h5" />
     </svg>
   );
 }

@@ -10,10 +10,7 @@ const primaryLinks = [
   { to: "/speaking", label: "Speaking" },
 ] as const;
 
-const secondaryLinks = [
-  { to: "/map", label: "Map" },
-  { to: "/changelog", label: "Changelog" },
-] as const;
+const secondaryLinks = [{ to: "/map", label: "Map" }] as const;
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   isActive
